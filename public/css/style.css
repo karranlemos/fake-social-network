@@ -10,6 +10,7 @@ html, body {
 }
 
 html, button {
+    font-size: 15px;
     font-family: 'Noto Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -19,6 +20,19 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
     
+}
+
+footer {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: var(--footer-height);
+    width: 100%;
+
+    background-color: var(--footer-bg-color);
+    color: white;
 }
 
 button {
@@ -105,6 +119,15 @@ form.full-width-form .secondary-links {
 form.full-width-form .secondary-links a {
     color: rgb(56, 56, 56);
     text-decoration: underline;
+}
+
+
+
+/* General */
+
+body > .content {
+    background-color: var(--primary-bg-color);
+    min-height: 100vh;
 }
 
 
@@ -239,3 +262,66 @@ form.full-width-form .secondary-links a {
 
 
 /* dashboard.php */
+
+div.content.dashboard {
+    display: grid;
+    grid-template-rows: var(--nav-height) 1fr auto;
+}
+
+nav.dashboard {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+
+    height: var(--nav-height);
+    background-color: var(--dashboard-nav-bg-color);
+}
+
+nav.dashboard .nav-container {
+    display: flex;
+    justify-content: space-between;
+
+    width: var(--dashboard-max-content-width);
+    height: 100%;
+}
+
+nav.dashboard .nav-container button.nav-button {
+    box-sizing: border-box;
+    min-width: 100px;
+    height: 100%;
+
+    margin: 0;
+    padding: 0 20px;
+
+    background-color: transparent;
+    color: var(--dashboard-nav-color);
+}
+
+nav.dashboard .nav-container .nav-options {
+    display: flex;
+}
+
+
+
+main.dashboard {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    max-width: var(--dashboard-max-content-width);
+    
+    margin: 0 auto;
+}
+
+main.dashboard .main-dashboard-content {
+    flex: 1 0;
+    max-width: var(--dashboard-max-content-width);
+    width: 100%;
+}
+
+main.dashboard .main-dashboard-content section.post {
+    margin: 20px 0;
+    min-height: 200px;
+    background-color: white;
+}

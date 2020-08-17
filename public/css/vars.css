@@ -1,5 +1,6 @@
 :root {
     --primary-bg-color: #f7f2f2;
+    --primary-theme-color: #6c3779;
 
     --heading-color: #9c274a;
     --sub-heading-color: #fa8572;
@@ -12,4 +13,14 @@
     --button-color-secondary: #ffffff;
 
     --modal-popup-bg-color: var(--primary-bg-color);
+
+    --footer-height: 80px;
+    --footer-bg-color: rgb(20, 20, 20);
+
+
+    --nav-height: 60px;
+
+    --dashboard-max-content-width: 1000px;
+    --dashboard-nav-bg-color: var(--primary-theme-color);
+    --dashboard-nav-color: white;
 }
