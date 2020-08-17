@@ -15,20 +15,22 @@ class Posts {
       FROM posts
       INNER JOIN users
       ON posts.id_user = users.id
-      ORDER BY posts.created DESC LIMIT :page OFFSET :offset
+      ORDER BY posts.created DESC LIMIT :limit OFFSET :offset
     ';
 
     $page = (int) $page;
     $page = $page-1;
     $rows_per_page = (int) $rows_per_page;
+
+    $offset = $page*$rows_per_page;
     
     if ($page < 0 || $rows_per_page < 0)
       throw new UnexpectedValueException('$page < 0 || $rows_per_page < 0');
 
     $posts = $this->db
       ->query($sql)
-      ->bind(':page', $rows_per_page)
-      ->bind(':offset', $page)
+      ->bind(':limit', $rows_per_page)
+      ->bind(':offset', $offset)
       ->fetchAll();
     return $posts;
   }
