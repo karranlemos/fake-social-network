@@ -163,6 +163,12 @@ form.full-width-form .secondary-links a {
     display: block;
 }
 
+@media only screen and (max-width: 400px) {
+    .modal .modal-popup {
+        min-width: 100%;
+    }
+}
+
 
 
 /* index.php */
