@@ -20,6 +20,20 @@ class Users {
     return $users;
   }
 
+  public function get_user($user_data, $user_field='username') {
+    if (!in_array($user_field, ['username', 'id', 'email']))
+      throw new UnexpectedValueException();
+ 
+    $sql = 'SELECT id, username, email FROM users WHERE '.$user_field.' = :userdata';
+
+    $user = $this->db
+      ->query($sql)
+      ->bind(':userdata', $user_data)
+      ->fetchOne();
+    
+    return $user;
+  }
+
   public function create_user($username, $email, $password) {
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 

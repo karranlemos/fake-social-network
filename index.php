@@ -2,8 +2,26 @@
 
 require_once 'config/init.php';
 
-if (isset($_COOKIE['logged_in'])) {
+if (isset($_SESSION['logged_in'])) {
   Helpers::redirect('/dashboard.php');
+}
+else if (isset($_COOKIE['logged_in'])) {
+  call_user_func(function() {
+    $cookie = explode(':', $_COOKIE['logged_in'], 2);
+    if (count($cookie) != 2) {
+      setcookie('logged_in', '', time()-30, '/');
+      return;
+    }
+    [$username, $token] = [$cookie[0], $cookie[1]];
+    $token_correct = (new UsersAuth())->check_token($username, $token);
+    if ($token_correct) {
+      $_SESSION['logged_in'] = 'true';
+      Helpers::redirect('/dashboard.php');
+    }
+    else {
+      setcookie('logged_in', '', time()-30, '/');
+    }
+  });
 }
 else if (isset($_POST['login-form'])) {
   call_user_func(function() {
@@ -12,7 +30,12 @@ else if (isset($_POST['login-form'])) {
     $correct_password = (new Users)->check_user_password($_POST['username'], $_POST['password']);
     if (!$correct_password)
       return;
-    setcookie('logged_in', 'yes', time() + (86400 * 30), '/');
+    if (isset($_POST['remember'])) {
+      $token = (new UsersAuth)->create_token($_POST['username']);
+      setcookie('logged_in', $_POST['username'].':'.$token, time() + (86400 * 30 * 365), '/');
+    }
+    $_SESSION['logged_in'] = 'true';
+    
     Helpers::redirect('/dashboard.php');
   });
 }

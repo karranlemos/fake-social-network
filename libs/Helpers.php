@@ -14,4 +14,8 @@ class Helpers {
     header('Location: '.$location);
     exit;
   }
+
+  public static function generate_token($n_bytes=256) {
+    return base64_encode(random_bytes($n_bytes));
+  }
 }
