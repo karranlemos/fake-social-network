@@ -186,6 +186,10 @@ body > .content {
     display: none;
 }
 
+.modal .modal-popup .modal-content-container section.settings-popup {
+    width: 700px;
+}
+
 .modal .modal-popup .modal-content-container section.show {
     display: block;
 }

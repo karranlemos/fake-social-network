@@ -15,7 +15,7 @@ else {
             <button class="nav-button home-button">Fakebook</button>
             <div class="nav-options">
               <button class="nav-button home-button mobile-only">Home</button>
-              <button class="nav-button">Settings</button>
+              <button class="nav-button modal-opener" data-modal-name="settings">Settings</button>
               <button class="nav-button">Logout</button>
             </div>
             <button class="nav-button mobile-menu-button"></button>
@@ -47,9 +47,9 @@ else {
         </header>
         <section class="modal-content-container">
 
-          <!-- <section class="" data-modal-name="login">
+          <section class="settings-popup" data-modal-name="settings">
             
-          </section> -->
+          </section>
 
         </section>
       </div>

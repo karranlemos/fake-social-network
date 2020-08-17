@@ -78,6 +78,9 @@ class NavMenu {
         this.menuButtons = this.nav.querySelectorAll('.nav-button:not(.mobile-menu-button)')
         for (let menuButton of this.menuButtons) {
             menuButton.addEventListener('click', this.closeMenu.bind(this))
+            if (menuButton.classList.contains('home-button')) {
+                menuButton.addEventListener('click', this.goToTopOfPage.bind(this))
+            }
         }
     }
 
@@ -87,6 +90,10 @@ class NavMenu {
 
     closeMenu() {
         this.nav.classList.remove('mobile-show')
+    }
+
+    goToTopOfPage() {
+        window.scrollTo(0, 0)
     }
 
 
