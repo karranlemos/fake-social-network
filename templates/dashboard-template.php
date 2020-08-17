@@ -26,21 +26,7 @@ else {
       </div>
 
       <main class="dashboard">
-        <div class="main-dashboard-content" id="dashboard-posts-container">
-          <!-- <section class="post">
-            <header>
-              <h2>title</h2>
-              <div class="post-data">
-                <span class="post-username">Posted by <em>username</em></span>
-                <span class="post-created"> at 01/01/1990.</span>
-              </div>
-            </header>
-            <section>
-              <p>text</p>
-            </section>
-          </section> -->
-
-        </div>
+        <div class="main-dashboard-content" id="dashboard-posts-container"></div>
       </main>
       
       <footer>Criado por Karran Lemos.</footer>

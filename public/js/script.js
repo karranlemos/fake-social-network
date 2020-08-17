@@ -112,12 +112,17 @@ class NavMenu {
 class PostsGetter {
     constructor() {
         this.container = document.getElementById('dashboard-posts-container')
+
         if (!this.container)
             throw 'No container found'
+
+        this.page = 0
+        this.pageLength = 10
+        this.noMorePosts = false
+
         window.addEventListener('scroll', function() {
-            if (window.scrollY+window.outerHeight < this.container.offsetTop+this.container.offsetHeight)
+            if (window.outerHeight < this.container.getBoundingClientRect().bottom)
                 return
-            console.log('hye')
             this.getAndLoadPosts()
             
         }.bind(this))
@@ -126,7 +131,10 @@ class PostsGetter {
     }
 
     getAndLoadPosts() {
-        var params = 'ajax&ajax-posts-page=1&ajax-posts-number=10'
+        if (this.noMorePosts)
+            return
+
+        var params = `ajax&ajax-posts-page=${++this.page}&ajax-posts-number=${this.pageLength}`
         Helpers.request('/dashboard.php', function(httpRequest) {
             if (httpRequest.status !== 200)
                 return
@@ -145,6 +153,11 @@ class PostsGetter {
     }
 
     loadPosts(jsonObj) {
+        if (jsonObj.length === 0) {
+            this.noMorePosts = true
+            this.toggleNoMorePostsMessage()
+            return
+        }
         for (let singleObj of jsonObj) {
             this.loadPost(singleObj)                
         }
@@ -176,6 +189,10 @@ class PostsGetter {
                 </section>
             </section>
         `
+    }
+
+    toggleNoMorePostsMessage() {
+        // TODO
     }
 }
 
