@@ -114,7 +114,7 @@ class PostsGetter {
         this.container = document.getElementById('dashboard-posts-container')
         if (!this.container)
             throw 'No container found'
-        this.container.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function() {
             if (window.scrollY+window.outerHeight < this.container.offsetTop+this.container.offsetHeight)
                 return
             console.log('hye')
