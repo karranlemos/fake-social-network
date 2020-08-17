@@ -16,7 +16,9 @@ else {
             <div class="nav-options">
               <button class="nav-button home-button mobile-only">Home</button>
               <button class="nav-button modal-opener" data-modal-name="settings">Settings</button>
-              <button class="nav-button">Logout</button>
+              <form action="" method="POST">
+                <button type="submit" class="nav-button" name="logout">Logout</button>
+              </form>
             </div>
             <button class="nav-button mobile-menu-button"></button>
           </div>

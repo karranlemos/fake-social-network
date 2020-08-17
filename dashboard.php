@@ -2,6 +2,14 @@
 
 require_once 'config/init.php';
 
+if (!isset($_COOKIE['logged_in'])) {
+  Helpers::redirect('/');
+}
+else if (isset($_POST['logout'])) {
+  setcookie('logged_in', '', time()-30, '/');
+  Helpers::redirect('/');
+}
+
 $template = new Template(__ROOT__.'/templates/dashboard-template.php');
 $template
   ->set('title', 'Fakebook - Your fake social network')

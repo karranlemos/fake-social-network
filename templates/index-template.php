@@ -44,7 +44,7 @@ else {
               <div class="checkbox-container">
                 <label>Remember me? <input type="checkbox" name="remember"></label>
               </div>
-              <button type="submit" class="primary button-block">Login</button>
+              <button type="submit" class="primary button-block" name="login-form">Login</button>
               <div class="secondary-links">
                 <a href="#">Forgot Your Password?</a>
               </div>
@@ -58,7 +58,7 @@ else {
               <input type="password" name="password" placeholder="Password" class="input-block">
               <input type="password" name="password-repeat" placeholder="Repeat Password" class="input-block">
               
-              <button type="submit" class="primary button-block">Register</button>
+              <button type="submit" class="primary button-block" name="register-form">Register</button>
             </form>
           </section>
 
