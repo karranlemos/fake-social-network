@@ -18,8 +18,8 @@ else {
               <p>Welcome back!</p>
             </header>
             <div class="account-buttons">
-              <button type="button" class="primary">Login</button>
-              <button type="button" class="secondary">Register</button>
+              <button type="button" class="primary modal-opener" data-modal-name="login">Login</button>
+              <button type="button" class="secondary modal-opener" data-modal-name="register">Register</button>
             </div>
           </div>
         </section>
@@ -37,7 +37,7 @@ else {
         </header>
         <section class="modal-content-container">
 
-          <section class="" data-modal-type="login">
+          <section class="" data-modal-name="login">
             <form action="index.php" method="post" class="full-width-form">
               <input type="text" name="username" placeholder="Username" class="input-block">
               <input type="password" name="password" placeholder="Password" class="input-block">
@@ -51,7 +51,7 @@ else {
             </form>
           </section>
 
-          <section class="" data-modal-type="register">
+          <section class="" data-modal-name="register">
             <form action="index.php" method="post" class="full-width-form">
               <input type="text" name="username" placeholder="Username" class="input-block">
               <input type="email" name="email" placeholder="Email" class="input-block">
