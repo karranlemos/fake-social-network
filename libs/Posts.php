@@ -18,10 +18,17 @@ class Posts {
       ORDER BY posts.created DESC LIMIT :page OFFSET :offset
     ';
 
+    $page = (int) $page;
+    $page = $page-1;
+    $rows_per_page = (int) $rows_per_page;
+    
+    if ($page < 0 || $rows_per_page < 0)
+      throw new UnexpectedValueException('$page < 0 || $rows_per_page < 0');
+
     $posts = $this->db
       ->query($sql)
       ->bind(':page', $rows_per_page)
-      ->bind(':offset', $page-1)
+      ->bind(':offset', $page)
       ->fetchAll();
     return $posts;
   }
