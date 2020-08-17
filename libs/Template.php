@@ -20,6 +20,7 @@ class Template {
 
   public function set($key, $value) {
     $this->data[$key] = $value;
+    return $this;
   }
 
   public function get_page() {
