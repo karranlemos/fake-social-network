@@ -13,8 +13,12 @@ html, button {
     font-family: 'Noto Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+body {
+    position: relative;
+}
+
 h1, h2, h3, h4, h5, h6 {
-    color: var(--heading-color);
+    
 }
 
 button {
@@ -40,6 +44,128 @@ button.secondary {
     background-color: var(--button-bg-color-secondary);
     color: var(--button-color-secondary);
 }
+
+.logo {
+    color: var(--heading-color);
+}
+
+button.close {
+    cursor: pointer;
+    box-sizing: border-box;
+    flex: 0 0;
+    margin: 0;
+
+    min-width: 50px;
+    min-height: 50px;
+
+    background-color: transparent;
+    background-image: url('../images/icons/Multiplication_Sign-black.svg');
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+
+form.full-width-form {
+    font-size: 14px;
+}
+
+form.full-width-form .input-block {
+    height: 50px;
+    margin: 10px;
+    padding: 12px;
+
+    border: 2px solid rgb(204, 204, 204);
+    border-radius: 5px;
+}
+
+form.full-width-form .button-block {
+    height: 50px;
+    margin: 20px;
+}
+
+form.full-width-form .input-block, form.full-width-form .button-block {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+form.full-width-form .checkbox-container {
+    margin: 15px 0;
+}
+
+form.full-width-form .secondary-links {
+    margin: 20px 0;
+    text-align: center;
+}
+
+form.full-width-form .secondary-links a {
+    color: rgb(56, 56, 56);
+    text-decoration: underline;
+}
+
+
+
+/* Modal */
+
+.modal {
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    position: fixed;
+
+    background-color: rgba(0, 0, 0, .9);
+
+    z-index: 10;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal .modal-popup {
+    min-width: 400px;
+    min-height: 200px;
+    background-color: var(--modal-popup-bg-color);
+}
+
+.modal .modal-popup header {
+    display: flex;
+    justify-content: right;
+    height: 60px;
+}
+
+.modal .modal-popup header .close {
+    height: 100%;
+}
+
+.modal .modal-popup .modal-content-container {
+    padding: 10px 20px;
+}
+
+.modal .modal-popup .modal-content-container h2 {
+    margin-top: 0;
+}
+
+.modal .modal-popup .modal-content-container section {
+    display: none;
+}
+
+.modal .modal-popup .modal-content-container section.show {
+    display: block;
+}
+
+
+
+/* index.php */
 
 .split-page {
     display: flex;
@@ -103,3 +229,7 @@ button.secondary {
         min-width: 300px;
     }
 }
+
+
+
+/* dashboard.php */

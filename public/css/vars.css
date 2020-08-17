@@ -1,4 +1,6 @@
 :root {
+    --primary-bg-color: #f7f2f2;
+
     --heading-color: #9c274a;
     --sub-heading-color: #fa8572;
 
@@ -9,6 +11,5 @@
     --button-bg-color-secondary: #6c5fa7;
     --button-color-secondary: #ffffff;
 
-    --primary-bg-color: #f7f2f2;
-
+    --modal-popup-bg-color: var(--primary-bg-color);
 }
