@@ -109,8 +109,109 @@ class NavMenu {
 
 
 
+class PostsGetter {
+    constructor() {
+        this.container = document.getElementById('dashboard-posts-container')
+        if (!this.container)
+            throw 'No container found'
+        this.container.addEventListener('scroll', function() {
+            if (window.scrollY+window.outerHeight < this.container.offsetTop+this.container.offsetHeight)
+                return
+            console.log('hye')
+            this.getAndLoadPosts()
+            
+        }.bind(this))
+
+        this.getAndLoadPosts()
+    }
+
+    getAndLoadPosts() {
+        var params = 'ajax&ajax-posts-page=1&ajax-posts-number=10'
+        Helpers.request('/dashboard.php', function(httpRequest) {
+            if (httpRequest.status !== 200)
+                return
+            if (httpRequest.responseText === '')
+                return
+                
+            try {
+                var jsonObj = JSON.parse(httpRequest.responseText)
+            }
+            catch (e) {
+                return
+            }
+
+            this.loadPosts(jsonObj)
+        }.bind(this), 'post', params)
+    }
+
+    loadPosts(jsonObj) {
+        for (let singleObj of jsonObj) {
+            this.loadPost(singleObj)                
+        }
+    }
+
+    loadPost(singleObj) {
+        for (let key of ['title', 'username', 'created', 'post_text']) {
+            if (singleObj[key] === undefined)
+                return       
+        }
+        this.container.insertAdjacentHTML(
+            'beforeend',
+            this.createPost(singleObj['title'], singleObj['username'], singleObj['created'], singleObj['post_text'])
+        )
+    }
+
+    createPost(title, username, created, text) {
+        return `
+            <section class="post">
+                <header>
+                <h2>${title}</h2>
+                <div class="post-data">
+                    <span class="post-username">Posted by <em>${username}</em></span>
+                    <span class="post-created"> at ${created}.</span>
+                </div>
+                </header>
+                <section>
+                    <p>${text}</p>
+                </section>
+            </section>
+        `
+    }
+}
+
+
+
+class Helpers {
+    constructor() {
+        throw 'Cannot instantiate Helpers class'
+    }
+
+    static request(url, callback, method='get', params='') {
+        var httpRequest = new XMLHttpRequest()
+        if (!httpRequest)
+            return false
+        
+        httpRequest.onload = function() {
+            callback(httpRequest)
+        }
+        
+        httpRequest.open(method, url)
+        httpRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
+        httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+        httpRequest.send(params)
+    }
+}
+
+
+
 var section_objects = {}
 window.addEventListener('load', function() {
     section_objects.modals = Modal.getAllModals()
     section_objects.navMenus = NavMenu.getAllNavMenus()
+    try {
+        section_objects.postGetter = new PostsGetter()
+    }
+    catch {
+        // Do nothing
+    }
 })

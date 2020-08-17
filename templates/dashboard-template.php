@@ -26,23 +26,19 @@ else {
       </div>
 
       <main class="dashboard">
-        <div class="main-dashboard-content">
-
-          <!-- <section class="post" data-post-id="0"></section> -->
-          <?php foreach ($data['posts'] as $post):?>
-            <section class="post">
-              <header>
-                <h2><?=($post->title) ? $post->title : 'Untitled' ?></h2>
-                <div class="post-data">
-                  <span class="post-username">Posted by <em><?=$post->username?></em></span>
-                  <span class="post-created"> at <?=explode(' ', $post->created)[0]?>.</span>
-                </div>
-              </header>
-              <section>
-                <p><?=$post->post_text?></p>
-              </section>
+        <div class="main-dashboard-content" id="dashboard-posts-container">
+          <!-- <section class="post">
+            <header>
+              <h2>title</h2>
+              <div class="post-data">
+                <span class="post-username">Posted by <em>username</em></span>
+                <span class="post-created"> at 01/01/1990.</span>
+              </div>
+            </header>
+            <section>
+              <p>text</p>
             </section>
-          <?php endforeach;?>
+          </section> -->
 
         </div>
       </main>
