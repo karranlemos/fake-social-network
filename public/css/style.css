@@ -9,6 +9,38 @@ html, body {
     min-width: 100%;
 }
 
+html, button {
+    font-family: 'Noto Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--heading-color);
+}
+
+button {
+    outline: none;
+    border-width: 0;
+    
+    background-color: var(--button-bg-color);
+    color: var(--button-color);
+
+    min-width: 200px;
+    min-height: 30px;
+    margin: 3px;
+
+    cursor: pointer;
+}
+
+button.primary {
+    background-color: var(--button-bg-color-primary);
+    color: var(--button-color-primary);
+}
+
+button.secondary {
+    background-color: var(--button-bg-color-secondary);
+    color: var(--button-color-secondary);
+}
+
 .split-page {
     display: flex;
     flex-wrap: nowrap;
@@ -20,17 +52,54 @@ html, body {
 
 .split-page .relevant {
     flex: 1 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     min-width: 400px;
-    background-color: rgb(31, 31, 31);
+    background-color: var(--primary-bg-color);
 }
 
 .split-page .optional {
     flex-grow: 1;
-    background-color: rgb(51, 51, 51);
+    background-color: #6c3779;
+    background-image: url('../images/backgrounds/bg-index.jpg');
+    background-position: left;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.split-page .central-options {
+    background-color: transparent;
+
+    padding: 10px;
+    box-sizing: border-box;
+
+    width: 70%;
+    min-width: 350px;
+}
+
+.account-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.account-buttons button {
+    height: 45px;
+    margin: 5px 0;
 }
 
 @media only screen and (max-width: 700px) {
+    .split-page .relevant {
+        min-width: 100%;
+    }
+
     .split-page .optional {
         display: none;
+    }
+
+    .split-page .central-options {
+        min-width: 300px;
     }
 }
