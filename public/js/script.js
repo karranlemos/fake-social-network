@@ -62,7 +62,48 @@ class Modal {
     }
 }
 
+
+
+class NavMenu {
+
+    constructor(nav) {
+        this.nav = nav
+        this.menuOpenerButtons = this.nav.querySelectorAll('.mobile-menu-button')
+        if (this.menuOpenerButtons.length === 0)
+            return
+        for (let menuOpenerButton of this.menuOpenerButtons) {
+            menuOpenerButton.addEventListener('click', this.toggleMenu.bind(this))
+        }
+
+        this.menuButtons = this.nav.querySelectorAll('.nav-button:not(.mobile-menu-button)')
+        for (let menuButton of this.menuButtons) {
+            menuButton.addEventListener('click', this.closeMenu.bind(this))
+        }
+    }
+
+    toggleMenu() {
+        this.nav.classList.toggle('mobile-show')
+    }
+
+    closeMenu() {
+        this.nav.classList.remove('mobile-show')
+    }
+
+
+
+    static getAllNavMenus() {
+        var navMenuElements = document.getElementsByTagName('nav')
+        var navMenus = []
+        for (let navMenuElement of navMenuElements) 
+            navMenus.push(new NavMenu(navMenuElement))
+        return navMenus
+    }
+}
+
+
+
 var section_objects = {}
 window.addEventListener('load', function() {
     section_objects.modals = Modal.getAllModals()
+    section_objects.navMenus = NavMenu.getAllNavMenus()
 })

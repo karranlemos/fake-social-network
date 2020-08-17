@@ -338,12 +338,16 @@ nav.dashboard .nav-container button.mobile-menu-button {
     }
 
     nav.dashboard .nav-container .nav-options button.nav-button {
-        height: 70px;
+        height: var(--nav-mobile-button-height);
     }
 
     nav.dashboard.mobile-show .nav-container .nav-options {
         display: flex;
         flex-direction: column;
+    }
+
+    .mobile-only {
+        display: initial;
     }
 }
 
