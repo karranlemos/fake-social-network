@@ -20,12 +20,13 @@ class Posts {
     return $posts;
   }
 
-  public function create_post($id_user, $post_text=null, $media=null) {
-    $sql = 'INSERT INTO posts (id_user, post_text, media) VALUES (:id_user, :post_text, :media)';
+  public function create_post($id_user, $title='', $post_text=null, $media=null) {
+    $sql = 'INSERT INTO posts (id_user, title, post_text, media) VALUES (:id_user, :title, :post_text, :media)';
 
     $success = $this->db
       ->query($sql)
       ->bind(':id_user', $id_user)
+      ->bind(':title', $title)
       ->bind(':post_text', $post_text)
       ->bind(':media', $media)
       ->execute()

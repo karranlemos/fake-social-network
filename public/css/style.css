@@ -375,6 +375,7 @@ main.dashboard .main-dashboard-content {
 
 main.dashboard .main-dashboard-content section.post {
     margin: 20px 0;
+    padding: 20px;
     min-height: 200px;
     background-color: white;
 }

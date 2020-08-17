@@ -6,7 +6,7 @@ if ($logged_in) {
 }
 else {
   $template = new Template(__DIR__.'/include/base-template.php', $data);
-  $template->set('get_body_content', function() { ?>
+  $template->set('get_body_content', function($data) { ?>
     
     <div class="content dashboard">
       <div class="nav-row-container">
@@ -26,12 +26,17 @@ else {
       <main class="dashboard">
         <div class="main-dashboard-content">
 
-          <section class="post" data-post-id="0">
-            
-          </section>
-          <section class="post" data-post-id="1">
-
-          </section>
+          <!-- <section class="post" data-post-id="0"></section> -->
+          <?php foreach ($data['posts'] as $post):?>
+            <section class="post">
+              <header>
+                <h2><?=($post->title) ? $post->title : 'Untitled' ?></h1>
+              </header>
+              <section>
+                <p><?=$post->post_text?></p>
+              </section>
+            </section>
+          <?php endforeach;?>
 
         </div>
       </main>

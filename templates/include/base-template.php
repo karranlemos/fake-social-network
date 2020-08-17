@@ -10,7 +10,7 @@
 </head>
 <body>
   
-  <?=$data['get_body_content']()?>
+  <?=$data['get_body_content']($data)?>
 
 </body>
 </html>
