@@ -79,6 +79,10 @@ button.close {
     background-position: center;
 }
 
+.mobile-only {
+    display: none;
+}
+
 
 
 form.full-width-form {
@@ -143,7 +147,7 @@ body > .content {
 
     background-color: rgba(0, 0, 0, .9);
 
-    z-index: 10;
+    z-index: var(--z-index-modal);
     top: 0;
     left: 0;
     right: 0;
@@ -300,6 +304,47 @@ nav.dashboard .nav-container button.nav-button {
 
 nav.dashboard .nav-container .nav-options {
     display: flex;
+}
+
+nav.dashboard .nav-container button.mobile-menu-button {
+    display: none;
+    background-image: url('../images/icons/Hamburger-white.svg');
+    background-position: center;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    min-width: 80px;
+}
+
+@media only screen and (max-width: 700px) {
+    nav.dashboard .nav-container button.mobile-menu-button {
+        display: block;
+    }
+
+    nav.dashboard.mobile-show .nav-container button.mobile-menu-button {
+        background-image: url('../images/icons/Multiplication_Sign-white.svg');
+    }
+
+    nav.dashboard .nav-container .nav-options {
+        display: none;
+        position: absolute;
+        z-index: var(--z-index-menu);
+
+        top: 100%;
+        left: 0;
+        right: 0;
+
+        height: calc(100vh - var(--nav-height));
+        background-color: var(--dashboard-nav-bg-color);
+    }
+
+    nav.dashboard .nav-container .nav-options button.nav-button {
+        height: 70px;
+    }
+
+    nav.dashboard.mobile-show .nav-container .nav-options {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 

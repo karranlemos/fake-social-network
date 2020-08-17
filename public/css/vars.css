@@ -23,4 +23,8 @@
     --dashboard-max-content-width: 1000px;
     --dashboard-nav-bg-color: var(--primary-theme-color);
     --dashboard-nav-color: white;
+
+
+    --z-index-menu: 1001;
+    --z-index-modal: 1000;
 }
