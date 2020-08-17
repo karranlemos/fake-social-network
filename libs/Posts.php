@@ -10,12 +10,18 @@ class Posts {
   }
 
   public function get_posts($page, $rows_per_page=self::ROWS_PER_PAGE) {
-    $sql = 'SELECT * FROM posts ORDER BY created DESC LIMIT :offset OFFSET :page';
+    $sql = '
+      SELECT posts.id, posts.title, posts.media, posts.post_text, posts.created, users.username
+      FROM posts
+      INNER JOIN users
+      ON posts.id_user = users.id
+      ORDER BY posts.created DESC LIMIT :page OFFSET :offset
+    ';
 
     $posts = $this->db
       ->query($sql)
-      ->bind(':offset', $rows_per_page)
-      ->bind(':page', $page-1)
+      ->bind(':page', $rows_per_page)
+      ->bind(':offset', $page-1)
       ->fetchAll();
     return $posts;
   }

@@ -30,7 +30,11 @@ else {
           <?php foreach ($data['posts'] as $post):?>
             <section class="post">
               <header>
-                <h2><?=($post->title) ? $post->title : 'Untitled' ?></h1>
+                <h2><?=($post->title) ? $post->title : 'Untitled' ?></h2>
+                <div class="post-data">
+                  <span class="post-username">Posted by <em><?=$post->username?></em></span>
+                  <span class="post-created"> at <?=explode(' ', $post->created)[0]?>.</span>
+                </div>
               </header>
               <section>
                 <p><?=$post->post_text?></p>
