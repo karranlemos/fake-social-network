@@ -208,11 +208,25 @@ class PostsGetter {
             'beforeend',
             this.createPost(singleObj['title'], singleObj['username'], singleObj['created'], singleObj['post_text'])
         )
+
+        var footer = this.container.querySelector('section:last-child footer')
+        if (!footer)
+            return
+        if (singleObj['username'] === Helpers.getFromServer('username')) {
+            var buttons = `
+                <button type="button" class="edit primary">Edit</button>
+                <button type="button" class="delete secondary">Delete</button>
+            `
+            footer.insertAdjacentHTML(
+                'beforeend',
+                buttons
+            )
+        }
     }
 
     createPost(title, username, created, text) {
         return `
-            <section class="post">
+            <section class="post" data-username="${username}">
                 <header>
                 <h2>${title}</h2>
                 <div class="post-data">
@@ -224,8 +238,7 @@ class PostsGetter {
                     <p>${text}</p>
                 </section>
                 <footer>
-                    <button type="button" class="edit primary">Edit</button>
-                    <button type="button" class="delete secondary">Delete</button>
+                    
                 </footer>
             </section>
         `
@@ -449,6 +462,28 @@ class Helpers {
         httpRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
         httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
         httpRequest.send(params)
+    }
+
+    /**
+     * Modified from:
+     * https://stackoverflow.com/questions/10730362/get-cookie-by-name
+     */
+    static getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        
+        if (parts.length !== 2)
+            return undefined
+        
+        return parts.pop().split(';').shift();
+    }
+
+    static getFromServer(name) {
+        if (fromServer === undefined)
+            throw 'fromServer undefined'
+        if (!fromServer.hasOwnProperty(name))
+            undefined
+        return fromServer[name]
     }
 }
 
