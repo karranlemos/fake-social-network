@@ -319,7 +319,7 @@ class LoginForm {
 
 
 
-    static getAllLoginforms() {
+    static getAllLoginForms() {
         var loginFormsElements = document.querySelectorAll('form.js-login-form')
         var loginForms = []
         for (let loginFormElement of loginFormsElements) {
@@ -331,6 +331,67 @@ class LoginForm {
             }
         }
         return loginForms
+    }
+}
+
+
+
+class RegisterForm {
+
+    constructor(registerForm) {
+        this.registerForm = registerForm
+        this.username = this.registerForm.querySelector('input[name="username"]')
+        this.email = this.registerForm.querySelector('input[name="email"]')
+        this.password = this.registerForm.querySelector('input[name="password"]')
+        this.password_repeat = this.registerForm.querySelector('input[name="password-repeat"]')
+        if (!this.username || !this.email || !this.password || !this.password_repeat)
+            throw 'Items not found'
+
+        this.registerForm.addEventListener('submit', function(e) {
+            e.preventDefault()
+            this.sendRegistration()
+        }.bind(this))
+    }
+
+    sendRegistration() {
+        var params = 
+            `username=${this.username.value}`
+            +`&email=${this.email.value}`
+            +`&password=${this.password.value}`
+            +`&password-repeat=${this.password_repeat.value}`
+        
+        Helpers.request('/requests/user/register/', function(httpRequest) {
+            if (httpRequest.status === 200) {
+                this.doRegistrationSuccess()
+            }
+            else if (httpRequest.status === 401) {
+                this.doRegistrationFailure()
+            }
+        }.bind(this), 'post', params)
+    }
+
+    doRegistrationSuccess() {
+        
+    }
+
+    doRegistrationFailure() {
+
+    }
+
+
+
+    static getAllRegisterForms() {
+        var registerFormsElements = document.querySelectorAll('form.js-register-form')
+        var registerForms = []
+        for (let registerFormElement of registerFormsElements) {
+            try {
+                registerForms.push(new RegisterForm(registerFormElement))
+            }
+            catch {
+                continue
+            }
+        }
+        return registerForms
     }
 }
 
@@ -370,5 +431,6 @@ window.addEventListener('load', function() {
         // Do nothing
     }
     section_objects.postSender = PostSender.getAllPostSenders()
-    section_objects.loginForm = LoginForm.getAllLoginforms()
+    section_objects.loginForms = LoginForm.getAllLoginForms()
+    section_objects.registerForms = RegisterForm.getAllRegisterForms()
 })

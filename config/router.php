@@ -7,7 +7,9 @@ const ROUTES = [
 
   '/requests/posts/post/' => 'pages/requests/posts/post.php',
   '/requests/posts/get/' => 'pages/requests/posts/get.php',
+  
   '/requests/user/login/' => 'pages/requests/user/login.php',
+  '/requests/user/register/' => 'pages/requests/user/register.php',
 ];
 
 const REDIRECTS = [
