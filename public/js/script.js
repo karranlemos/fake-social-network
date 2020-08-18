@@ -141,7 +141,7 @@ class NavMenu {
 
 class PostsGetter {
     constructor() {
-        this.PERIOD_BETWEEN_REQUESTS = 1000
+        this.PERIOD_BETWEEN_REQUESTS = 100
 
         this.container = document.getElementById('dashboard-posts-container')
 
@@ -285,8 +285,10 @@ class PostSender {
                 this.showSuccessMessage()
             else
                 this.showFailureMessage()
-            
+                
             this.unblockSubmit()            
+            this.form.reset()
+
         }.bind(this), 'post', params)
     }
 
