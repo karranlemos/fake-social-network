@@ -7,23 +7,6 @@ else if (isset($_COOKIE['logged_in'])) {
   if (Helpers::log_in_with_cookie())
     Helpers::redirect('/dashboard/');
 }
-else if (isset($_POST['login-form'])) {
-  call_user_func(function() {
-    if (!isset($_POST['username']) || !isset($_POST['password']))
-      return;
-    $correct_password = (new Users)->check_user_password($_POST['username'], $_POST['password']);
-    if (!$correct_password)
-      return;
-    if (isset($_POST['remember'])) {
-      $token = (new UsersAuth)->create_token($_POST['username']);
-      setcookie('logged_in', $_POST['username'].':'.$token, time() + (86400 * 30 * 365), '/');
-    }
-    
-    Helpers::log_in_session($_POST['username']);
-    
-    Helpers::redirect('/dashboard/');
-  });
-}
 else if (isset($_POST['register-form'])) {
   call_user_func(function() {
     foreach (['username', 'email', 'password', 'password-repeat'] as $name) {

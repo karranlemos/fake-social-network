@@ -278,6 +278,64 @@ class PostSender {
 
 
 
+class LoginForm {
+
+    constructor(loginForm) {
+        this.loginForm = loginForm
+        this.username = this.loginForm.querySelector('input[name="username"]')
+        this.password = this.loginForm.querySelector('input[name="password"]')
+        this.remember = this.loginForm.querySelector('input[name="remember"]')
+        if (!this.username || !this.password || !this.remember)
+            throw 'Items not found'
+        this.loginForm.addEventListener('submit', function(e) {
+            e.preventDefault()
+            this.sendLoginCredentials()
+        }.bind(this))
+    }
+
+    sendLoginCredentials() {
+        var params = 
+            `username=${this.username.value}`
+            +`&password=${this.password.value}`
+            +`${this.remember.checked ? '&remember' : ''}`
+        
+        Helpers.request('/requests/user/login/', function(httpRequest) {
+            if (httpRequest.status === 200) {
+                this.doLoginSuccess()
+            }
+            else if (httpRequest.status === 401) {
+                this.doLoginFailure()
+            }
+        }.bind(this), 'post', params)
+    }
+
+    doLoginSuccess() {
+        location.reload(true)
+    }
+
+    doLoginFailure() {
+
+    }
+
+
+
+    static getAllLoginforms() {
+        var loginFormsElements = document.querySelectorAll('form.js-login-form')
+        var loginForms = []
+        for (let loginFormElement of loginFormsElements) {
+            try {
+                loginForms.push(new LoginForm(loginFormElement))
+            }
+            catch {
+                continue
+            }
+        }
+        return loginForms
+    }
+}
+
+
+
 class Helpers {
     constructor() {
         throw 'Cannot instantiate Helpers class'
@@ -312,4 +370,5 @@ window.addEventListener('load', function() {
         // Do nothing
     }
     section_objects.postSender = PostSender.getAllPostSenders()
+    section_objects.loginForm = LoginForm.getAllLoginforms()
 })

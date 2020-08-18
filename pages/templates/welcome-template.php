@@ -38,7 +38,7 @@ else {
         <section class="modal-content-container">
 
           <section class="" data-modal-name="login">
-            <form action="/welcome/" method="post" class="full-width-form">
+            <form action="" method="post" class="full-width-form js-login-form">
               <input type="text" name="username" placeholder="Username" class="input-block">
               <input type="password" name="password" placeholder="Password" class="input-block">
               <div class="checkbox-container">
@@ -52,7 +52,7 @@ else {
           </section>
 
           <section class="" data-modal-name="register">
-            <form action="/welcome/" method="post" class="full-width-form">
+            <form action="" method="post" class="full-width-form js-register-form">
               <input type="text" name="username" placeholder="Username" class="input-block">
               <input type="email" name="email" placeholder="Email" class="input-block">
               <input type="password" name="password" placeholder="Password" class="input-block">
