@@ -59,8 +59,8 @@ button.secondary {
     color: var(--button-color-secondary);
 }
 
-.logo {
-    color: var(--heading-color);
+button.big {
+    min-height: 60px;
 }
 
 button.close {
@@ -79,8 +79,24 @@ button.close {
     background-position: center;
 }
 
+.logo {
+    color: var(--heading-color);
+}
+
 .mobile-only {
     display: none;
+}
+
+.full-center {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.full-center h1 {
+    margin-bottom: 30px;
 }
 
 
@@ -154,6 +170,10 @@ body > .content {
     height: 100vh;
 }
 
+.modal.modal-no-overlay {
+    background-color: transparent;
+}
+
 .modal.show {
     display: flex;
 }
@@ -164,6 +184,11 @@ body > .content {
     background-color: var(--modal-popup-bg-color);
 }
 
+.modal .modal-popup.modal-popup-big {
+    min-width: 800px;
+    min-height: 400px;
+}
+
 .modal .modal-popup header {
     display: flex;
     justify-content: right;
@@ -172,6 +197,11 @@ body > .content {
 
 .modal .modal-popup header .close {
     height: 100%;
+}
+
+.modal .modal-popup.modal-popup-direct-content {
+    padding: 30px;
+    box-sizing: border-box;
 }
 
 .modal .modal-popup .modal-content-container {
@@ -378,4 +408,15 @@ main.dashboard .main-dashboard-content section.post {
     padding: 20px;
     min-height: 200px;
     background-color: white;
+}
+
+
+
+/* Floating block */
+div.content.floating-block-container {
+    background: url('../images/backgrounds/bg-index.jpg') center/cover no-repeat;
+}
+
+.floating-block-container .modal .modal-popup {
+
 }

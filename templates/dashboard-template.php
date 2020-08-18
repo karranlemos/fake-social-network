@@ -33,7 +33,7 @@ else {
 
     </div>
     
-    <div class="modal">
+    <div class="modal js-modal">
       <div class="modal-popup">
         <header>
           <button class="close"></button>

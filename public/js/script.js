@@ -48,7 +48,7 @@ class Modal {
 
     
     static getAllModals() {
-        var modalDivs = document.querySelectorAll('div.modal')
+        var modalDivs = document.querySelectorAll('div.js-modal')
         var modals = []
         for (let modalDiv of modalDivs) {
             try {
