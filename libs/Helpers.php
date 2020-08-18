@@ -33,8 +33,14 @@ class Helpers {
       setcookie('logged_in', '', time()-30, '/'); 
     }
     
-    $_SESSION['logged_in'] = 'true';
+    self::log_in_session($username);
+
     return true;
+  }
+
+  public static function log_in_session($username) {
+    $_SESSION['logged_in'] = 'true';
+    $_SESSION['username'] = $username;
   }
 
   public static function generate_token($n_bytes=256) {

@@ -18,7 +18,8 @@ else if (isset($_POST['login-form'])) {
       $token = (new UsersAuth)->create_token($_POST['username']);
       setcookie('logged_in', $_POST['username'].':'.$token, time() + (86400 * 30 * 365), '/');
     }
-    $_SESSION['logged_in'] = 'true';
+    
+    Helpers::log_in_session($_POST['username']);
     
     Helpers::redirect('/dashboard/');
   });
