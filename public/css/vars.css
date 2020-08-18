@@ -17,6 +17,9 @@
     --footer-height: 80px;
     --footer-bg-color: rgb(20, 20, 20);
 
+    --form-input-no-border-bg-color: rgb(255, 255, 255);
+    --form-input-no-border-color: black;
+
 
     --nav-height: 70px;
     --nav-mobile-button-height: 70px;

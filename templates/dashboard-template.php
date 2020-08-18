@@ -26,6 +26,9 @@ else {
       </div>
 
       <main class="dashboard">
+        <div class="create-post-box">
+          <button type="button" class="primary modal-opener" data-modal-name="create-post">Create Post</button>
+        </div>
         <div class="main-dashboard-content" id="dashboard-posts-container"></div>
       </main>
       
@@ -42,6 +45,14 @@ else {
 
           <section class="settings-popup" data-modal-name="settings">
             
+          </section>
+
+          <section class="settings-popup" data-modal-name="create-post">
+            <form action="/dashboard/" method="post" class="create-post-form full-width-form">
+              <input type="text" name="title" placeholder="Title" class="input-block">
+              <textarea name="post_text" placeholder="Say something!" class="input-block"></textarea>
+              <button type="submit" name="create-post" class="primary button-block">Submit</button>
+            </form>
           </section>
 
         </section>

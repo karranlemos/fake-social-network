@@ -9,7 +9,7 @@ html, body {
     min-width: 100%;
 }
 
-html, button {
+html, button, form input, form textarea {
     font-size: 15px;
     font-family: 'Noto Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -44,7 +44,6 @@ button {
 
     min-width: 200px;
     min-height: 30px;
-    margin: 3px;
 
     cursor: pointer;
 }
@@ -116,7 +115,14 @@ form.full-width-form .input-block {
 
 form.full-width-form .button-block {
     height: 50px;
-    margin: 20px;
+    margin: 20px 0;
+}
+
+form.full-width-form textarea {
+    resize: vertical;
+    min-height: 80px;
+
+    outline-width: 0;
 }
 
 form.full-width-form .input-block, form.full-width-form .button-block {
@@ -403,11 +409,20 @@ main.dashboard .main-dashboard-content {
     width: 100%;
 }
 
-main.dashboard .main-dashboard-content section.post {
+main.dashboard .main-dashboard-content section.post,
+main.dashboard .create-post-box {
     margin: 20px 0;
     padding: 20px;
-    min-height: 200px;
     background-color: white;
+}
+
+main.dashboard .main-dashboard-content section.post {
+    min-height: 200px;
+}
+
+main.dashboard .create-post-box {
+    display: flex;
+    justify-content: center;
 }
 
 
