@@ -49,4 +49,9 @@ class Posts {
 
     return $success;
   }
+
+  public function create_post_username($username, $title='', $post_text=null, $media=null) {
+    $user_data = (new Users())->get_user($username, 'username');
+    return $this->create_post($user_data->id, $title, $post_text, $media);
+  }
 }

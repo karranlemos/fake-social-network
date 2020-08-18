@@ -15,7 +15,7 @@ class Helpers {
     exit;
   }
 
-  public static function return_request_error($code, $message) {
+  public static function return_request_code($code, $message) {
     http_response_code($code);
     echo $message;
     exit;
