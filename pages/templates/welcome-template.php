@@ -15,7 +15,6 @@ else {
           <div class="central-options">
             <header>
               <h1 class="logo">Fakebook</h1>
-              <p>Welcome back!</p>
             </header>
             <div class="account-buttons">
               <button type="button" class="primary modal-opener" data-modal-name="login">Login</button>

@@ -35,6 +35,10 @@ footer {
     color: white;
 }
 
+input {
+    outline-width: 0;
+}
+
 button {
     outline: none;
     border-width: 0;
@@ -80,6 +84,15 @@ button.close {
 
 .logo {
     color: var(--heading-color);
+    text-transform: lowercase;
+    
+    font-family: 'Righteous', cursive;
+    font-size: 48px;
+    text-align: center;
+}
+
+h1.logo {
+    margin: 20px 0;
 }
 
 .mobile-only {
