@@ -69,6 +69,12 @@ class Modal {
 
 
     
+    static closeAllModals() {
+        for (let modal of _STATIC_MODAL_FIELDS._modals) {
+            modal.closeModal()
+        }
+    }
+    
     static addModalOpener(modalOpenerElement) {
         for (let modal of _STATIC_MODAL_FIELDS._modals) {
             if (modal._set_modal_opener(modalOpenerElement))
@@ -272,60 +278,55 @@ class PostsGetter {
 }
 
 
+/**
+ * Holds a form, submits the form and does
+ * something upon success or failure.
+ */
+class GenericPostSender {
+    
+    constructor(form, route, method,
+                callbackSetElements, callbackGetParams, callbackCheckSuccess, 
+                callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+                shouldBlockSubmit=false) {
 
-class PostSender {
-
-    constructor(form) {
         this.form = form
+
+        this.callbackSetElements = callbackSetElements.bind(this)
+        this.callbackGetParams = callbackGetParams.bind(this)
+        this.callbackOnSuccess = callbackOnSuccess.bind(this)
+        this.callbackOnFailure = callbackOnFailure.bind(this)
+        this.callbackOnResponse = callbackOnResponse.bind(this)
+        this.callbackCheckSuccess = callbackCheckSuccess.bind(this)
+
+        this.data = {}
+        this.callbackSetElements()
+
+        this.route = route
+        this.method = method
+        this.shouldBlockSubmit = shouldBlockSubmit
+
         this.blockedSubmit = false
-
-        this.titleElement = this.form.querySelector('input[name="title"]')
-        this.postTextElement = this.form.querySelector('textarea[name="post-text"]')
-        if (!this.titleElement || !this.postTextElement)
-            throw 'Cannot find fields'
-
+        
         this.form.addEventListener('submit', function(e) {
             e.preventDefault()
-            this.sendPost()
+            this.send()
         }.bind(this))
-
-
-        this.getAndLoadPosts()
     }
 
-    sendPost() {
-        if (this.blockedSubmit)
-            return
-        this.blockSubmit()
-        
-        var title = this.titleElement.value
-        var postText = this.postTextElement.value
-        var params = `title=${title}&post-text=${postText}`
-        
-        Helpers.request('/requests/posts/post/', function(httpRequest) {
-            if (httpRequest.status === 201)
-                this.doAfterSuccess({
-                    id: 0,
-                    username: Helpers.getFromServer('username'),
-                    title: title,
-                    post_text: postText,
-                    created: 'now'
-                })
+    send() {
+        if (this.shouldBlockSubmit)
+            this.blockSubmit()
+
+        Helpers.request(this.route, function(httpRequest) {
+            if (this.callbackCheckSuccess(httpRequest.status))
+                this.callbackOnSuccess()
             else
-                this.doAfterFailure()
-                
-            this.unblockSubmit()            
+                this.callbackOnFailure()
+            
+            this.unblockSubmit()
             this.form.reset()
-
-        }.bind(this), 'post', params)
-    }
-
-    doAfterSuccess(singleObj) {
-        PostsGetter.addPostAll(singleObj, 'afterbegin')
-    }
-
-    doAfterFailure() {
-
+            this.callbackOnResponse()
+        }.bind(this), this.method, this.callbackGetParams())
     }
 
     blockSubmit() {
@@ -336,14 +337,33 @@ class PostSender {
         this.blockedSubmit = false
     }
 
+    setData(key, value) {
+        this.data[key] = value
+        return this
+    }
+
+    getData(key) {
+        return this.data[key]
+    }
 
 
-    static getAllPostSenders() {
-        var formsElements = document.querySelectorAll('form.create-post-form')
+
+    static getAllSenders(
+            formQuery, route, method,
+            callbackSetElements, callbackGetParams, callbackCheckSuccess, 
+            callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+            shouldBlockSubmit=false) {
+
+        var formsElements = document.querySelectorAll(formQuery)
         var forms = []
         for (let formElement of formsElements) {
             try {
-                forms.push(new PostSender(formElement))
+                forms.push(new GenericPostSender(
+                    formElement, route, method,
+                    callbackSetElements, callbackGetParams, callbackCheckSuccess, 
+                    callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+                    shouldBlockSubmit
+                ))
             }
             catch {
                 continue
@@ -355,120 +375,156 @@ class PostSender {
 
 
 
-class LoginForm {
-
-    constructor(loginForm) {
-        this.loginForm = loginForm
-        this.username = this.loginForm.querySelector('input[name="username"]')
-        this.password = this.loginForm.querySelector('input[name="password"]')
-        this.remember = this.loginForm.querySelector('input[name="remember"]')
-        if (!this.username || !this.password || !this.remember)
-            throw 'Items not found'
-        this.loginForm.addEventListener('submit', function(e) {
-            e.preventDefault()
-            this.sendLoginCredentials()
-        }.bind(this))
+class Factories {
+    constructor() {
+        throw 'Cannot instantiate Factories class'
     }
 
-    sendLoginCredentials() {
-        var params = 
-            `username=${this.username.value}`
-            +`&password=${this.password.value}`
-            +`${this.remember.checked ? '&remember' : ''}`
-        
-        Helpers.request('/requests/user/login/', function(httpRequest) {
-            if (httpRequest.status === 200) {
-                this.doLoginSuccess()
-            }
-            else if (httpRequest.status === 401) {
-                this.doLoginFailure()
-            }
-        }.bind(this), 'post', params)
-    }
+    static registerFormsFactory() {
 
-    doLoginSuccess() {
-        location.reload(true)
-    }
+        var query = 'form.js-register-form'
 
-    doLoginFailure() {
+        var route = '/requests/user/register/'
+        var method = 'post'
+        var shouldBlockSubmit = false
 
-    }
-
-
-
-    static getAllLoginForms() {
-        var loginFormsElements = document.querySelectorAll('form.js-login-form')
-        var loginForms = []
-        for (let loginFormElement of loginFormsElements) {
-            try {
-                loginForms.push(new LoginForm(loginFormElement))
-            }
-            catch {
-                continue
+        var callbackSetElements = function() {
+            this
+                .setData('username', this.form.querySelector('input[name="username"]'))
+                .setData('email', this.form.querySelector('input[name="email"]'))
+                .setData('password', this.form.querySelector('input[name="password"]'))
+                .setData('password_repeat', this.form.querySelector('input[name="password-repeat"]'))
+            
+            for (let dataKey of ['username', 'email', 'password', 'password_repeat']) {
+                if (!this.getData(dataKey))
+                    throw 'Items not found'
             }
         }
-        return loginForms
-    }
-}
 
+        var callbackGetParams = function() {
+            var params = 
+                `username=${this.getData('username').value}`
+                +`&email=${this.getData('email').value}`
+                +`&password=${this.getData('password').value}`
+                +`&password-repeat=${this.getData('password_repeat').value}`
+            return params
+        }
 
+        var callbackOnSuccess = function () {}
+        var callbackOnFailure = function () {}
+        var callbackOnResponse = function() {}
 
-class RegisterForm {
+        var callbackCheckSuccess = function(statusCode) {
+            return ([200, 201].includes(statusCode))
+        }
 
-    constructor(registerForm) {
-        this.registerForm = registerForm
-        this.username = this.registerForm.querySelector('input[name="username"]')
-        this.email = this.registerForm.querySelector('input[name="email"]')
-        this.password = this.registerForm.querySelector('input[name="password"]')
-        this.password_repeat = this.registerForm.querySelector('input[name="password-repeat"]')
-        if (!this.username || !this.email || !this.password || !this.password_repeat)
-            throw 'Items not found'
-
-        this.registerForm.addEventListener('submit', function(e) {
-            e.preventDefault()
-            this.sendRegistration()
-        }.bind(this))
-    }
-
-    sendRegistration() {
-        var params = 
-            `username=${this.username.value}`
-            +`&email=${this.email.value}`
-            +`&password=${this.password.value}`
-            +`&password-repeat=${this.password_repeat.value}`
-        
-        Helpers.request('/requests/user/register/', function(httpRequest) {
-            if (httpRequest.status === 200) {
-                this.doRegistrationSuccess()
-            }
-            else if (httpRequest.status === 401) {
-                this.doRegistrationFailure()
-            }
-        }.bind(this), 'post', params)
+        return GenericPostSender.getAllSenders(
+            query, route, method,
+            callbackSetElements, callbackGetParams, callbackCheckSuccess,
+            callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+            shouldBlockSubmit
+        )
     }
 
-    doRegistrationSuccess() {
-        
-    }
+    static loginFormsFactory() {
 
-    doRegistrationFailure() {
+        var query = 'form.js-login-form'
 
-    }
+        var route = '/requests/user/login/'
+        var method = 'post'
+        var shouldBlockSubmit = false
 
-
-
-    static getAllRegisterForms() {
-        var registerFormsElements = document.querySelectorAll('form.js-register-form')
-        var registerForms = []
-        for (let registerFormElement of registerFormsElements) {
-            try {
-                registerForms.push(new RegisterForm(registerFormElement))
-            }
-            catch {
-                continue
+        var callbackSetElements = function() {
+            this
+                .setData('username', this.form.querySelector('input[name="username"]'))
+                .setData('password', this.form.querySelector('input[name="password"]'))
+                .setData('remember', this.form.querySelector('input[name="remember"]'))
+            
+            for (let dataKey of ['username', 'password', 'remember']) {
+                if (!this.getData(dataKey))
+                    throw 'Items not found'
             }
         }
-        return registerForms
+
+        var callbackGetParams = function() {
+            var params = 
+                `username=${this.getData('username').value}`
+                +`&password=${this.getData('password').value}`
+                +`${this.getData('remember').checked ? '&remember' : ''}`
+            return params
+        }
+
+        var callbackOnSuccess = function() {
+            location.reload(true)
+        }
+
+        var callbackOnFailure = function() {}
+
+        var callbackCheckSuccess = function(statusCode) {
+            return (statusCode === 200)
+        }
+
+        var callbackOnResponse = function() {}
+
+        return GenericPostSender.getAllSenders(
+            query, route, method,
+            callbackSetElements, callbackGetParams, callbackCheckSuccess,
+            callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+            shouldBlockSubmit
+        )
+    }
+
+    static sendPostFactory() {
+
+        var query = 'form.create-post-form'
+
+        var route = '/requests/posts/post/'
+        var method = 'post'
+        var shouldBlockSubmit = true
+
+        var callbackSetElements = function() {
+            this
+                .setData('title_element', this.form.querySelector('input[name="title"]'))
+                .setData('post_text_element', this.form.querySelector('textarea[name="post-text"]'))
+            
+            for (let dataKey of ['title_element', 'post_text_element']) {
+                if (!this.getData(dataKey))
+                    throw 'Items not found'
+            }
+        }
+
+        var callbackGetParams = function() {
+            var title = this.getData('title_element').value
+            var postText = this.getData('post_text_element').value
+            var params = `title=${title}&post-text=${postText}`
+            return params
+        }
+
+        var callbackOnSuccess = function () {
+            PostsGetter.addPostAll({
+                id: 0,
+                username: Helpers.getFromServer('username'),
+                title: this.getData('title_element').value,
+                post_text: this.getData('post_text_element').value,
+                created: 'now'
+            }, 'afterbegin')
+            Modal.closeAllModals()
+        }
+
+        var callbackOnFailure = function () {}
+
+        var callbackCheckSuccess = function(statusCode) {
+            return (statusCode === 201)
+        }
+
+        var callbackOnResponse = function() {}
+        
+        return GenericPostSender.getAllSenders(
+            query, route, method,
+            callbackSetElements, callbackGetParams, callbackCheckSuccess,
+            callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+            shouldBlockSubmit
+        )
     }
 }
 
@@ -529,7 +585,7 @@ window.addEventListener('load', function() {
     catch {
         // Do nothing
     }
-    section_objects.postSender = PostSender.getAllPostSenders()
-    section_objects.loginForms = LoginForm.getAllLoginForms()
-    section_objects.registerForms = RegisterForm.getAllRegisterForms()
+    section_objects.postSender = Factories.sendPostFactory()
+    section_objects.loginForms = Factories.loginFormsFactory()
+    section_objects.registerForms = Factories.registerFormsFactory()
 })
