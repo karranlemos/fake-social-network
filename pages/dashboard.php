@@ -4,9 +4,7 @@ if (!isset($_SESSION['logged_in'])) {
   Helpers::redirect('/welcome/');
 }
 else if (isset($_POST['logout'])) {
-  setcookie('logged_in', '', time()-30, '/');
-  unset($_SESSION['logged_in']);
-  unset($_SESSION['username']);
+  Session::logout();
   Helpers::redirect('/welcome/');
 }
 

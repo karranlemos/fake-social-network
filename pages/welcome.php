@@ -4,7 +4,7 @@ if (isset($_SESSION['logged_in'])) {
   Helpers::redirect('/dashboard/');
 }
 else if (isset($_COOKIE['logged_in'])) {
-  if (Helpers::log_in_with_cookie())
+  if (Session::log_in_with_cookie())
     Helpers::redirect('/dashboard/');
 }
 

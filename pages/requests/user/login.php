@@ -18,6 +18,6 @@ if (isset($_POST['remember'])) {
   setcookie('logged_in', $_POST['username'].':'.$token, time() + (86400 * 30 * 365), '/');
 }
 
-Helpers::log_in_session($_POST['username']);
+Session::log_in_session($_POST['username']);
 
 Helpers::return_request_code(200, 'Logged in.');
