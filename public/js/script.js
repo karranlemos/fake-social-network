@@ -235,7 +235,7 @@ class PostsGetter {
                 <header>
                 <h2>${title}</h2>
                 <div class="post-data">
-                    <span class="post-username">Posted by <em>${username}</em></span>
+                    <span class="post-username">Posted by <em>${username!==null ? username : '[deleted]'}</em></span>
                     <span class="post-created"> at ${created}.</span>
                 </div>
                 </header>

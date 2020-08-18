@@ -13,7 +13,7 @@ class Posts {
     $sql = '
       SELECT posts.id, posts.title, posts.media, posts.post_text, posts.created, users.username
       FROM posts
-      INNER JOIN users
+      LEFT JOIN users
       ON posts.id_user = users.id
       ORDER BY posts.created DESC LIMIT :limit OFFSET :offset
     ';
