@@ -14,8 +14,7 @@ const MESSAGES = [
   '/messages/404/' => 'pages/404.php',
 ];
 
-$route = $_SERVER['REQUEST_URI'];
-$uri_info = pathinfo($route);
+$route = strtok($_SERVER['REQUEST_URI'], '?');
 if ($route[strlen($route)-1] !== '/')
   $route .= '/';
 
