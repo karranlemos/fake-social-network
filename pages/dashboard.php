@@ -1,6 +1,6 @@
 <?php
 
-if (!isset($_SESSION['logged_in'])) {
+if (!Session::is_logged_in_session()) {
   Helpers::redirect('/welcome/');
 }
 else if (isset($_POST['logout'])) {

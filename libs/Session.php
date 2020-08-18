@@ -36,4 +36,12 @@ class Session {
     if (!is_null($redirect_to))
       Helpers::redirect($redirect_to);
   }
+
+  public static function is_logged_in_session() {
+    return isset($_SESSION['logged_in']);
+  }
+
+  public static function has_logged_in_cookies() {
+    return isset($_COOKIE['logged_in']);
+  }
 }

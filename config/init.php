@@ -16,4 +16,8 @@ foreach ($libs_paths as $lib_path) {
   require_once __ROOT__.'/libs/'.$lib_path.'.php';
 }
 
+if (!Session::is_logged_in_session() && Session::has_logged_in_cookies()) {
+  Session::log_in_with_cookie();
+}
+
 require_once __DIR__.'/router.php';
