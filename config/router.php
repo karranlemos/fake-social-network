@@ -4,11 +4,14 @@ const ROUTES = [
   '/welcome/' => 'pages/welcome.php',
   '/dashboard/' => 'pages/dashboard.php',
   // '/profile/' => 'pages/profile.php',
-  '/messages/404/' => 'pages/404.php',
 ];
 
 const REDIRECTS = [
   '/' => '/welcome/',
+];
+
+const MESSAGES = [
+  '/messages/404/' => 'pages/404.php',
 ];
 
 $route = $_SERVER['REQUEST_URI'];
@@ -19,4 +22,4 @@ if ($route[strlen($route)-1] !== '/')
 if (array_key_exists($route, REDIRECTS))
   Helpers::redirect(REDIRECTS[$route]);
 
-require_once (ROUTES[$route] ?? ROUTES['/messages/404/']);
+require_once (ROUTES[$route] ?? MESSAGES['/messages/404/']);
