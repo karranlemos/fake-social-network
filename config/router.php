@@ -4,8 +4,9 @@ const ROUTES = [
   '/welcome/' => 'pages/welcome.php',
   '/dashboard/' => 'pages/dashboard.php',
   // '/profile/' => 'pages/profile.php',
-  
+
   '/requests/posts/post/' => 'pages/requests/posts/post.php',
+  '/requests/posts/get/' => 'pages/requests/posts/get.php',
 ];
 
 const REDIRECTS = [

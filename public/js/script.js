@@ -134,8 +134,8 @@ class PostsGetter {
         if (this.noMorePosts)
             return
 
-        var params = `ajax&ajax-posts-page=${++this.page}&ajax-posts-number=${this.pageLength}`
-        Helpers.request('/dashboard.php', function(httpRequest) {
+        var params = `page=${++this.page}&number-rows=${this.pageLength}`
+        Helpers.request(`/requests/posts/get/?${params}`, function(httpRequest) {
             if (httpRequest.status !== 200)
                 return
             if (httpRequest.responseText === '')
@@ -149,7 +149,7 @@ class PostsGetter {
             }
 
             this.loadPosts(jsonObj)
-        }.bind(this), 'post', params)
+        }.bind(this))
     }
 
     loadPosts(jsonObj) {
