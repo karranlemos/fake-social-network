@@ -15,3 +15,5 @@ $libs_paths = ['Template', 'Database', 'Posts', 'Users', 'UsersAuth', 'Helpers']
 foreach ($libs_paths as $lib_path) {
   require_once __ROOT__.'/libs/'.$lib_path.'.php';
 }
+
+require_once __DIR__.'/router.php';

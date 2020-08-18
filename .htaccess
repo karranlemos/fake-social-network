@@ -1,0 +1,11 @@
+RewriteEngine On
+Options -Indexes
+
+RewriteCond %{REQUEST_URI} !(/$|\.) 
+RewriteCond $1 !^(public)
+RewriteRule (.*) %{REQUEST_URI}/ [R=301,L] 
+
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond $1 !^(public)
+RewriteRule ^(.+)$ index.php?url=$1 [L]

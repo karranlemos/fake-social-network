@@ -59,6 +59,9 @@ class Users {
       ->fetchOne()
     ;
 
+    if ($user === false)
+      return false;
+
     return password_verify($provided_password, $user->password);
   }
 }
