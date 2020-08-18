@@ -13,4 +13,7 @@ $uri_info = pathinfo($route);
 if ($route[strlen($route)-1] !== '/')
   $route .= '/';
 
-require_once (ROUTES[$route] ?? ROUTES['/messages/404/']);
+if (array_key_exists($route, ROUTES))
+  require_once (ROUTES[$route]);
+else
+  Helpers::redirect('/messages/404/');
