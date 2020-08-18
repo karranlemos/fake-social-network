@@ -32,7 +32,7 @@ else {
         <div class="main-dashboard-content" id="dashboard-posts-container"></div>
       </main>
       
-      <footer>Criado por Karran Lemos.</footer>
+      <footer class="page-footer">Criado por Karran Lemos.</footer>
 
     </div>
     

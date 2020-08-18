@@ -22,7 +22,7 @@ h1, h2, h3, h4, h5, h6 {
     
 }
 
-footer {
+footer.page-footer {
     box-sizing: border-box;
     display: flex;
     justify-content: center;
@@ -431,6 +431,10 @@ main.dashboard .create-post-box {
 
 main.dashboard .main-dashboard-content section.post {
     min-height: 200px;
+}
+
+main.dashboard .main-dashboard-content section.post footer {
+    margin-top: 30px;
 }
 
 main.dashboard .create-post-box {

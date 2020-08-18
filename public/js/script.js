@@ -170,7 +170,7 @@ class PostsGetter {
     }
 
     loadPost(singleObj) {
-        for (let key of ['title', 'username', 'created', 'post_text']) {
+        for (let key of ['id', 'title', 'username', 'created', 'post_text']) {
             if (singleObj[key] === undefined)
                 return       
         }
@@ -193,6 +193,10 @@ class PostsGetter {
                 <section>
                     <p>${text}</p>
                 </section>
+                <footer>
+                    <button type="button" class="edit primary">Edit</button>
+                    <button type="button" class="delete secondary">Delete</button>
+                </footer>
             </section>
         `
     }
