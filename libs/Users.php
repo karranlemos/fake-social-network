@@ -50,6 +50,18 @@ class Users {
     return $success;
   }
 
+  public function delete_user($username) {
+    $success = $this->db
+      ->query('DELETE FROM users WHERE username = :username')
+      ->bind(':username', $username)
+      ->execute()
+    ;
+
+    return $success;
+  }
+
+
+
   public function check_user_password($username, $provided_password) {
     $sql = 'SELECT password FROM users WHERE username = :username';
 

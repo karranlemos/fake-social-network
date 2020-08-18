@@ -10,6 +10,7 @@ const ROUTES = [
   
   '/requests/user/login/' => 'pages/requests/user/login.php',
   '/requests/user/register/' => 'pages/requests/user/register.php',
+  '/requests/user/delete/' => 'pages/requests/user/delete.php',
 ];
 
 const REDIRECTS = [
