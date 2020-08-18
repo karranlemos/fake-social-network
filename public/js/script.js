@@ -29,7 +29,7 @@ class Modal {
                 this.closeModal()
         }.bind(this))
 
-        _STATIC_MODAL_FIELDS._modals.push(this.modal)
+        _STATIC_MODAL_FIELDS._modals.push(this)
     }
 
     _set_modal_section(sectionElement) {
@@ -138,7 +138,9 @@ class NavMenu {
 }
 
 
-
+const _STATIC_POST_GETTER_FIELDS = {
+    postGetters: [],
+}
 class PostsGetter {
     constructor() {
         this.PERIOD_BETWEEN_REQUESTS = 100
@@ -164,6 +166,8 @@ class PostsGetter {
         }.bind(this))
 
         this.getAndLoadPosts()
+
+        _STATIC_POST_GETTER_FIELDS.postGetters.push(this)
     }
 
     getAndLoadPosts() {
@@ -199,17 +203,18 @@ class PostsGetter {
         }
     }
 
-    loadPost(singleObj) {
-        for (let key of ['id', 'title', 'username', 'created', 'post_text']) {
-            if (singleObj[key] === undefined)
-                return       
-        }
+    loadPost(singleObj, position='beforeend') {
+        if (!PostsGetter._checkSingleObj(singleObj))
+            return
         this.container.insertAdjacentHTML(
-            'beforeend',
+            position,
             this.createPost(singleObj['title'], singleObj['username'], singleObj['created'], singleObj['post_text'])
         )
-
-        var footer = this.container.querySelector('section:last-child footer')
+        
+        if (position == 'beforeend')
+            var footer = this.container.querySelector('section:last-child footer')
+        else
+            var footer = this.container.querySelector('section:first-child footer')
         if (!footer)
             return
         if (singleObj['username'] === Helpers.getFromServer('username')) {
@@ -247,6 +252,23 @@ class PostsGetter {
     toggleNoMorePostsMessage() {
         // TODO
     }
+
+
+    static _checkSingleObj(singleObj) {
+        for (let key of ['id', 'title', 'username', 'created', 'post_text']) {
+            if (singleObj[key] === undefined)
+                return false
+        }
+        return true
+    }
+
+    static addPostAll(singleObj, position='afterbegin') {
+        if (!PostsGetter._checkSingleObj(singleObj))
+            return
+        for (let postsGetter of _STATIC_POST_GETTER_FIELDS.postGetters) {
+            postsGetter.loadPost(singleObj, position)
+        }
+    }
 }
 
 
@@ -282,9 +304,15 @@ class PostSender {
         
         Helpers.request('/requests/posts/post/', function(httpRequest) {
             if (httpRequest.status === 201)
-                this.showSuccessMessage()
+                this.doAfterSuccess({
+                    id: 0,
+                    username: Helpers.getFromServer('username'),
+                    title: title,
+                    post_text: postText,
+                    created: 'now'
+                })
             else
-                this.showFailureMessage()
+                this.doAfterFailure()
                 
             this.unblockSubmit()            
             this.form.reset()
@@ -292,11 +320,11 @@ class PostSender {
         }.bind(this), 'post', params)
     }
 
-    showSuccessMessage() {
-        
+    doAfterSuccess(singleObj) {
+        PostsGetter.addPostAll(singleObj, 'afterbegin')
     }
 
-    showFailureMessage() {
+    doAfterFailure() {
 
     }
 
