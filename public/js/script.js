@@ -1,3 +1,8 @@
+// Due to lack of support to static fields
+const _STATIC_MODAL_FIELDS = {
+    _modals: [],
+}
+
 class Modal {
 
     constructor(modal) {
@@ -9,20 +14,12 @@ class Modal {
         var sectionElements = this.modal.querySelectorAll('.modal-content-container section')
         this.sections = {}
         for (let sectionElement of sectionElements) {
-            let modalName = sectionElement.getAttribute('data-modal-name')
-            if (!modalName)
-                continue
-            this.sections[modalName] = sectionElement
+            this._set_modal_section(sectionElement)
         }
 
         var modalOpenerElements = document.getElementsByClassName('modal-opener')
         for (let modalOpenerElement of modalOpenerElements) {
-            let modalName = modalOpenerElement.getAttribute('data-modal-name')
-            if (!modalName || !this.sections.hasOwnProperty(modalName))
-                continue
-            modalOpenerElement.addEventListener('click', function() {
-                this.openModal(modalName)
-            }.bind(this))
+            this._set_modal_opener(modalOpenerElement)
         }
         this.currentModalName = ''
 
@@ -31,7 +28,32 @@ class Modal {
             if (e.target === this.modal)
                 this.closeModal()
         }.bind(this))
+
+        _STATIC_MODAL_FIELDS._modals.push(this.modal)
     }
+
+    _set_modal_section(sectionElement) {
+        var modalName = sectionElement.getAttribute('data-modal-name')
+        if (!modalName)
+            return false
+
+        this.sections[modalName] = sectionElement
+        return true
+    }
+
+    _set_modal_opener(modalOpenerElement) {
+        var modalName = modalOpenerElement.getAttribute('data-modal-name')
+        if (!modalName || !this.sections.hasOwnProperty(modalName))
+            return false
+
+        modalOpenerElement.addEventListener('click', function() {
+            this.openModal(modalName)
+        }.bind(this))
+
+        return true
+    }
+
+
 
     closeModal() {
         this.modal.classList.remove('show')
@@ -47,6 +69,14 @@ class Modal {
 
 
     
+    static addModalOpener(modalOpenerElement) {
+        for (let modal of _STATIC_MODAL_FIELDS._modals) {
+            if (modal._set_modal_opener(modalOpenerElement))
+                return true
+        }
+        return false
+    }
+
     static getAllModals() {
         var modalDivs = document.querySelectorAll('div.js-modal')
         var modals = []
