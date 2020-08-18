@@ -48,7 +48,7 @@ else {
           </section>
 
           <section class="settings-popup" data-modal-name="create-post">
-            <form action="/requests/posts/post/" method="post" class="create-post-form full-width-form">
+            <form action="" method="post" class="create-post-form full-width-form">
               <input type="text" name="title" placeholder="Title" class="input-block" required>
               <textarea name="post-text" placeholder="Say something!" class="input-block" required></textarea>
               <button type="submit" name="create-post" class="primary button-block">Submit</button>

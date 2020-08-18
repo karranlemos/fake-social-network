@@ -4,10 +4,6 @@ if (!isset($_SESSION['username'])) {
   Helpers::return_request_code(401, "401 (Unauthorized): The user must be logged in to post.");
 }
 
-if (!isset($_POST['create-post'])) {
-  Helpers::return_request_code(422, "422 (Unprocessable Entity): 'create-post' form missing.");
-}
-
 if (!isset($_POST['title']) || !isset($_POST['post-text'])) {
   Helpers::return_request_code(422, "422 (Unprocessable Entity): 'title', 'post-text' missing.");
 }

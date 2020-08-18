@@ -111,16 +111,22 @@ class NavMenu {
 
 class PostsGetter {
     constructor() {
+        this.PERIOD_BETWEEN_REQUESTS = 1000
+
         this.container = document.getElementById('dashboard-posts-container')
 
         if (!this.container)
             throw 'No container found'
 
         this.page = 0
-        this.pageLength = 10
+        this.pageLength = 2
         this.noMorePosts = false
+        this.lastRequest = Date.now()-this.PERIOD_BETWEEN_REQUESTS
 
         window.addEventListener('scroll', function() {
+            if (Date.now()-this.lastRequest < this.PERIOD_BETWEEN_REQUESTS)
+                return
+            this.lastRequest = Date.now()
             if (window.outerHeight < this.container.getBoundingClientRect().bottom)
                 return
             this.getAndLoadPosts()
@@ -198,6 +204,80 @@ class PostsGetter {
 
 
 
+class PostSender {
+
+    constructor(form) {
+        this.form = form
+        this.blockedSubmit = false
+
+        this.titleElement = this.form.querySelector('input[name="title"]')
+        this.postTextElement = this.form.querySelector('textarea[name="post-text"]')
+        if (!this.titleElement || !this.postTextElement)
+            throw 'Cannot find fields'
+
+        this.form.addEventListener('submit', function(e) {
+            e.preventDefault()
+            this.sendPost()
+        }.bind(this))
+
+
+        this.getAndLoadPosts()
+    }
+
+    sendPost() {
+        if (this.blockedSubmit)
+            return
+        this.blockSubmit()
+        
+        var title = this.titleElement.value
+        var postText = this.postTextElement.value
+        var params = `title=${title}&post-text=${postText}`
+        
+        Helpers.request('/requests/posts/post/', function(httpRequest) {
+            if (httpRequest.status === 201)
+                this.showSuccessMessage()
+            else
+                this.showFailureMessage()
+            
+            this.unblockSubmit()            
+        }.bind(this), 'post', params)
+    }
+
+    showSuccessMessage() {
+        
+    }
+
+    showFailureMessage() {
+
+    }
+
+    blockSubmit() {
+        this.blockedSubmit = true
+    }
+
+    unblockSubmit() {
+        this.blockedSubmit = false
+    }
+
+
+
+    static getAllPostSenders() {
+        var formsElements = document.querySelectorAll('form.create-post-form')
+        var forms = []
+        for (let formElement of formsElements) {
+            try {
+                forms.push(new PostSender(formElement))
+            }
+            catch {
+                continue
+            }
+        }
+        return forms
+    }
+}
+
+
+
 class Helpers {
     constructor() {
         throw 'Cannot instantiate Helpers class'
@@ -231,4 +311,5 @@ window.addEventListener('load', function() {
     catch {
         // Do nothing
     }
+    section_objects.postSender = PostSender.getAllPostSenders()
 })
