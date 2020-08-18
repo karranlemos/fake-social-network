@@ -20,4 +20,8 @@ if (!Session::is_logged_in_session() && Session::has_logged_in_cookies()) {
   Session::log_in_with_cookie();
 }
 
+define('FROM_SERVER', [
+  'username' => (Session::is_logged_in_session() ? $_SESSION['username'] : ''),
+]);
+
 require_once __DIR__.'/router.php';
