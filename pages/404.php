@@ -1,6 +1,6 @@
 <?php
 
-$template = new Template(__ROOT__.'/templates/404-template.php');
+$template = new Template(__DIR__.'/templates/404-template.php');
 $template
   ->set('title', 'Fakebook - Page not found')
   ->set('base', __BASE__)

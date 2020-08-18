@@ -50,7 +50,7 @@ else if (isset($_POST['register-form'])) {
   });
 }
 
-$template = new Template(__ROOT__.'/templates/welcome-template.php');
+$template = new Template(__DIR__.'/templates/welcome-template.php');
 $template
   ->set('title', 'Fakebook - Your fake social network')
   ->set('base', __BASE__)
