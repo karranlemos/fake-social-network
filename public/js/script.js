@@ -143,6 +143,8 @@ class PostElement {
     constructor(post_id, title, username, created, text, parentNode, position='beforeend') {
         if (!['beforeend', 'afterbegin'].includes(position))
             throw "Position must be 'beforeend' or 'afterstart'."
+        
+        created = this._format_date_string(created)
 
         var html = this._createPostHTML(post_id, title, username, created, text)
         this.node = this._createPostNode(html, parentNode, position)
@@ -215,6 +217,16 @@ class PostElement {
         buttonDelete.addEventListener('click', function() {
             Factories.updateDeleteForms(this.post_id)
         }.bind(this))
+    }
+
+    _format_date_string(created) {
+        created = created.split(' ', 2)
+        
+        // yyyy-mm-dd => dd/mm/yyyy
+        var date = created[0].split('-').reverse().join('/')
+        var time = created[1]
+
+        return date+' '+time
     }
 
 
