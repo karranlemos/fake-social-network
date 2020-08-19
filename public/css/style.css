@@ -90,14 +90,14 @@ button.close {
 .logo {
     color: var(--heading-color);
     text-transform: lowercase;
-    
+
     font-family: 'Righteous', cursive;
-    font-size: 48px;
-    text-align: center;
 }
 
 h1.logo {
     margin: 20px 0;
+    font-size: 48px;
+    text-align: center;
 }
 
 .mobile-only {
@@ -358,6 +358,10 @@ nav.dashboard .nav-container button.nav-button {
 
     background-color: transparent;
     color: var(--dashboard-nav-color);
+}
+
+nav.dashboard .nav-container button.nav-button.logo {
+    font-size: 24px;
 }
 
 nav.dashboard .nav-container .nav-options {

@@ -115,7 +115,9 @@ class NavMenu {
         for (let menuButton of this.menuButtons) {
             menuButton.addEventListener('click', this.closeMenu.bind(this))
             if (menuButton.classList.contains('home-button')) {
-                menuButton.addEventListener('click', this.goToTopOfPage.bind(this))
+                menuButton.addEventListener('click', function() {
+                    location.reload(true)
+                }.bind(this))
             }
         }
     }
