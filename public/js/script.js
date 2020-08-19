@@ -197,7 +197,7 @@ class PostElement {
 
         var buttons = `
             <button type="button" class="js-edit primary js-modal-opener" data-modal-name="edit-post">Edit</button>
-            <button type="button" class="js-delete secondary" data-post-id="${this.post_id}">Delete</button>
+            <button type="button" class="js-delete secondary js-modal-opener" data-modal-name="delete-post">Delete</button>
         `
         footer.insertAdjacentHTML(
             'beforeend',
@@ -205,14 +205,16 @@ class PostElement {
         )
 
         var buttonEdit = footer.querySelector('button.js-edit')
-        
         Modal.addModalOpener(buttonEdit)
         buttonEdit.addEventListener('click', function() {
             Factories.updateEditForms(this.post_id, this.title, this.textElement.innerHTML)
         }.bind(this))
 
         var buttonDelete = footer.querySelector('button.js-delete')
-        Factories.deletePostSingleFactory(buttonDelete)
+        Modal.addModalOpener(buttonDelete)
+        buttonDelete.addEventListener('click', function() {
+            Factories.updateDeleteForms(this.post_id)
+        }.bind(this))
     }
 
 
@@ -223,11 +225,11 @@ class PostElement {
 
 
 
-    static deletePostText(postId) {
+    static deletePostNode(postId) {
         var post = _STATIC_POST_ELEMENT_FIELDS.postElements[postId]
         if (!post)
             return
-        post.node.remove()
+        post.node.parentNode.removeChild(post.node)
         delete _STATIC_POST_ELEMENT_FIELDS.postElements[postId]
     }
 
@@ -699,7 +701,7 @@ class Factories {
 
 
     static deletePostFactory() {
-        var query = 'button.js-delete'
+        var query = 'form.js-delete-post-form'
         var formsElements = document.querySelectorAll(query)
         for (let formElement of formsElements) {
             Factories.deletePostSingleFactory(formElement)
@@ -711,9 +713,9 @@ class Factories {
         var route = '/requests/posts/delete/'
         var method = 'post'
         var shouldBlockSubmit = true
-
+        
         var callbackSetElements = function() {
-            this.setData('post-id', this.form.getAttribute('data-post-id'))
+            this.setData('post-id', this.form.querySelector('input[name=post-id]'))
             
             for (let dataKey of ['post-id']) {
                 if (!this.getData(dataKey))
@@ -722,12 +724,13 @@ class Factories {
         }
 
         var callbackGetParams = function() {
-            var params = `post-id=${this.getData('post-id')}`
+            var params = `post-id=${this.getData('post-id').value}`
             return params
         }
 
         var callbackOnSuccess = function () {
-            PostElement.deletePostText(this.getData('post-id'))
+            PostElement.deletePostNode(this.getData('post-id').value)
+            Modal.closeAllModals()
         }
 
         var callbackOnFailure = function () {}
@@ -739,14 +742,20 @@ class Factories {
 
         var callbackOnResponse = function() {}
         
-        var editSender = new GenericPostSender(
+        var deleteSender = new GenericPostSender(
             form, route, method,
             callbackSetElements, callbackGetParams, callbackCheckSuccess,
             callbackOnSuccess, callbackOnFailure, callbackOnResponse, callbackBeforeRequest,
             shouldBlockSubmit
         )
 
-        _STATIC_FACTORIES_FIELDS.deleteSenders.push(editSender)
+        _STATIC_FACTORIES_FIELDS.deleteSenders.push(deleteSender)
+    }
+
+    static updateDeleteForms(postId) {
+        for (let deleteSender of _STATIC_FACTORIES_FIELDS.deleteSenders) {
+            deleteSender.getData('post-id').value = postId
+        }
     }
 
 

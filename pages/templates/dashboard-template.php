@@ -93,6 +93,24 @@ else {
       </div>
     </div>
 
+    <div class="modal js-modal" data-modal-name="delete-post">
+      <div class="modal-popup modal-popup-big">
+        <header>
+          <button class="close"></button>
+        </header>
+        <section class="modal-content-container">
+
+          <section class="settings-popup">
+            <form action="" method="post" class="js-delete-post-form full-width-form">
+              <input type="hidden" name="post-id" value="">
+              <button type="submit" class="primary button-block">Delete?</button>
+            </form>
+          </section>
+
+        </section>
+      </div>
+    </div>
+
 
 
   <?php });
