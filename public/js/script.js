@@ -288,7 +288,7 @@ class GenericPostSender {
     
     constructor(form, route, method,
                 callbackSetElements, callbackGetParams, callbackCheckSuccess, 
-                callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+                callbackOnSuccess, callbackOnFailure, callbackOnResponse, callbackBeforeRequest,
                 shouldBlockSubmit=false) {
 
         this.form = form
@@ -298,6 +298,7 @@ class GenericPostSender {
         this.callbackOnSuccess = callbackOnSuccess.bind(this)
         this.callbackOnFailure = callbackOnFailure.bind(this)
         this.callbackOnResponse = callbackOnResponse.bind(this)
+        this.callbackBeforeRequest = callbackBeforeRequest.bind(this)
         this.callbackCheckSuccess = callbackCheckSuccess.bind(this)
 
         this.data = {}
@@ -332,6 +333,7 @@ class GenericPostSender {
         if (this.shouldBlockSubmit)
             this.blockSubmit()
 
+        this.callbackBeforeRequest()
         Helpers.request(this.route, function(httpRequest) {
             if (this.callbackCheckSuccess(httpRequest.status))
                 this.callbackOnSuccess()
@@ -367,7 +369,7 @@ class GenericPostSender {
     static getAllSenders(
             formQuery, route, method,
             callbackSetElements, callbackGetParams, callbackCheckSuccess, 
-            callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+            callbackOnSuccess, callbackOnFailure, callbackOnResponse, callbackBeforeRequest,
             shouldBlockSubmit=false) {
 
         var formsElements = document.querySelectorAll(formQuery)
@@ -377,7 +379,7 @@ class GenericPostSender {
                 forms.push(new GenericPostSender(
                     formElement, route, method,
                     callbackSetElements, callbackGetParams, callbackCheckSuccess, 
-                    callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+                    callbackOnSuccess, callbackOnFailure, callbackOnResponse, callbackBeforeRequest,
                     shouldBlockSubmit
                 ))
             }
@@ -429,6 +431,7 @@ class Factories {
         var callbackOnSuccess = function () {}
         var callbackOnFailure = function () {}
         var callbackOnResponse = function() {}
+        var callbackBeforeRequest = function() {}
 
         var callbackCheckSuccess = function(statusCode) {
             return ([200, 201].includes(statusCode))
@@ -437,7 +440,7 @@ class Factories {
         return GenericPostSender.getAllSenders(
             query, route, method,
             callbackSetElements, callbackGetParams, callbackCheckSuccess,
-            callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+            callbackOnSuccess, callbackOnFailure, callbackOnResponse, callbackBeforeRequest,
             shouldBlockSubmit
         )
     }
@@ -475,6 +478,7 @@ class Factories {
         }
 
         var callbackOnFailure = function() {}
+        var callbackBeforeRequest = function() {}
 
         var callbackCheckSuccess = function(statusCode) {
             return (statusCode === 200)
@@ -485,7 +489,7 @@ class Factories {
         return GenericPostSender.getAllSenders(
             query, route, method,
             callbackSetElements, callbackGetParams, callbackCheckSuccess,
-            callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+            callbackOnSuccess, callbackOnFailure, callbackOnResponse, callbackBeforeRequest,
             shouldBlockSubmit
         )
     }
@@ -528,6 +532,7 @@ class Factories {
         }
 
         var callbackOnFailure = function () {}
+        var callbackBeforeRequest = function () {}
 
         var callbackCheckSuccess = function(statusCode) {
             return (statusCode === 201)
@@ -538,7 +543,7 @@ class Factories {
         return GenericPostSender.getAllSenders(
             query, route, method,
             callbackSetElements, callbackGetParams, callbackCheckSuccess,
-            callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+            callbackOnSuccess, callbackOnFailure, callbackOnResponse, callbackBeforeRequest,
             shouldBlockSubmit
         )
     }
@@ -574,6 +579,7 @@ class Factories {
         }
 
         var callbackOnFailure = function () {}
+        var callbackBeforeRequest = function () {}
 
         var callbackCheckSuccess = function(statusCode) {
             return (statusCode === 200)
@@ -584,7 +590,7 @@ class Factories {
         return GenericPostSender.getAllSenders(
             query, route, method,
             callbackSetElements, callbackGetParams, callbackCheckSuccess,
-            callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+            callbackOnSuccess, callbackOnFailure, callbackOnResponse, callbackBeforeRequest,
             shouldBlockSubmit
         )
     }
@@ -609,6 +615,7 @@ class Factories {
         }
 
         var callbackOnFailure = function () {}
+        var callbackBeforeRequest = function () {}
 
         var callbackCheckSuccess = function(statusCode) {
             return (statusCode === 200)
@@ -619,7 +626,7 @@ class Factories {
         return GenericPostSender.getAllSenders(
             query, route, method,
             callbackSetElements, callbackGetParams, callbackCheckSuccess,
-            callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+            callbackOnSuccess, callbackOnFailure, callbackOnResponse, callbackBeforeRequest,
             shouldBlockSubmit
         )
     }
