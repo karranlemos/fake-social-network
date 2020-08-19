@@ -35,6 +35,23 @@ class Posts {
     return $posts;
   }
 
+  public function get_post($post_id) {
+    $sql = '
+      SELECT posts.id, posts.title, posts.media, posts.post_text, posts.created, users.username
+      FROM posts
+      LEFT JOIN users
+      ON posts.id_user = users.id
+      WHERE posts.id = :post_id
+    ';
+
+    $post = $this->db
+      ->query($sql)
+      ->bind(':post_id', $post_id)
+      ->fetchOne();
+
+    return $post;
+  }
+
   public function create_post($id_user, $title='', $post_text=null, $media=null) {
     $sql = 'INSERT INTO posts (id_user, title, post_text, media) VALUES (:id_user, :title, :post_text, :media)';
 
@@ -44,6 +61,19 @@ class Posts {
       ->bind(':title', $title)
       ->bind(':post_text', $post_text)
       ->bind(':media', $media)
+      ->execute()
+    ;
+
+    return $success;
+  }
+
+  public function update_post($id, $post_text) {
+    $sql = 'UPDATE posts SET post_text = :post_text WHERE id = :id';
+
+    $success = $this->db
+      ->query($sql)
+      ->bind(':id', $id)
+      ->bind(':post_text', $post_text)
       ->execute()
     ;
 

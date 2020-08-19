@@ -58,6 +58,15 @@ else {
             </form>
           </section>
 
+          <section class="settings-popup" data-modal-name="edit-post">
+            <form action="" method="post" class="js-edit-post-form full-width-form">
+              <input type="hidden" name="post-id" value="">
+              <input type="text" name="title" placeholder="Title" class="input-block" disabled>
+              <textarea name="post-text" placeholder="Say something!" class="input-block" required></textarea>
+              <button type="submit" class="primary button-block">Update</button>
+            </form>
+          </section>
+
         </section>
       </div>
     </div>

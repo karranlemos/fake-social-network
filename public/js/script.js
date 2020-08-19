@@ -146,6 +146,103 @@ class NavMenu {
 }
 
 
+
+const _STATIC_POST_ELEMENT_FIELDS = {
+    postElements: {},
+}
+
+class PostElement {
+    constructor(post_id, title, username, created, text, parentNode, position='beforeend') {
+        if (!['beforeend', 'afterbegin'].includes(position))
+            throw "Position must be 'beforeend' or 'afterstart'."
+
+        var html = this._createPostHTML(post_id, title, username, created, text)
+        this.node = this._createPostNode(html, parentNode, position)
+
+        this.post_id = post_id
+        this.title = title
+        this.username = username
+        this.created = created
+
+        this.textElement = this.node.querySelector('section p')
+
+        this._set_buttons()
+        
+        _STATIC_POST_ELEMENT_FIELDS.postElements[post_id] = this
+    }
+
+    _createPostNode(html, parentNode, position) {
+        parentNode.insertAdjacentHTML(position, html)
+        if (position === 'afterbegin')
+            return parentNode.querySelector('section.post:first-child')
+        else
+            return parentNode.querySelector('section.post:last-child')
+    }
+
+    _createPostHTML(post_id, title, username, created, text) {
+        return `
+            <section class="post" data-post-id="${post_id}" data-username="${username}">
+                <header>
+                <h2>${title}</h2>
+                <div class="post-data">
+                    <span class="post-username">Posted by <em>${username!==null ? username : '[deleted]'}</em></span>
+                    <span class="post-created"> at ${created}.</span>
+                </div>
+                </header>
+                <section>
+                    <p>${text}</p>
+                </section>
+                <footer>
+                    
+                </footer>
+            </section>
+        `
+    }
+
+    _set_buttons() {
+        var footer = this.node.querySelector('footer')
+
+        if (!footer)
+            return
+        if (this.username !== Helpers.getFromServer('username'))
+            return
+
+        var buttons = `
+            <button type="button" class="js-edit primary modal-opener" data-modal-name="edit-post">Edit</button>
+            <button type="button" class="js-delete secondary">Delete</button>
+        `
+        footer.insertAdjacentHTML(
+            'beforeend',
+            buttons
+        )
+
+        var buttonEdit = footer.querySelector('button.js-edit')
+        var buttonDelete = footer.querySelector('button.js-delete')
+        
+        Modal.addModalOpener(buttonEdit)
+        buttonEdit.addEventListener('click', function() {
+            Factories.updateEditForms(this.post_id, this.title, this.textElement.innerHTML)
+        }.bind(this))
+    }
+
+
+
+    getNode() {
+        return this.node
+    }
+
+
+
+    static updatePostText(postId, newText) {
+        var postElement = _STATIC_POST_ELEMENT_FIELDS.postElements[postId]
+        if (!postElement)
+            return
+        postElement.textElement.innerText = newText
+    }
+}
+
+
+
 const _STATIC_POST_GETTER_FIELDS = {
     postGetters: [],
 }
@@ -162,6 +259,8 @@ class PostsGetter {
         this.pageLength = 2
         this.noMorePosts = false
         this.lastRequest = Date.now()-this.PERIOD_BETWEEN_REQUESTS
+        
+        this.postsElements = []
 
         window.addEventListener('scroll', function() {
             if (Date.now()-this.lastRequest < this.PERIOD_BETWEEN_REQUESTS)
@@ -214,47 +313,11 @@ class PostsGetter {
     loadPost(singleObj, position='beforeend') {
         if (!PostsGetter._checkSingleObj(singleObj))
             return
-        this.container.insertAdjacentHTML(
-            position,
-            this.createPost(singleObj['title'], singleObj['username'], singleObj['created'], singleObj['post_text'])
-        )
-        
-        if (position == 'beforeend')
-            var footer = this.container.querySelector('section:last-child footer')
-        else
-            var footer = this.container.querySelector('section:first-child footer')
-        if (!footer)
-            return
-        if (singleObj['username'] === Helpers.getFromServer('username')) {
-            var buttons = `
-                <button type="button" class="edit primary">Edit</button>
-                <button type="button" class="delete secondary">Delete</button>
-            `
-            footer.insertAdjacentHTML(
-                'beforeend',
-                buttons
-            )
-        }
-    }
-
-    createPost(title, username, created, text) {
-        return `
-            <section class="post" data-username="${username}">
-                <header>
-                <h2>${title}</h2>
-                <div class="post-data">
-                    <span class="post-username">Posted by <em>${username!==null ? username : '[deleted]'}</em></span>
-                    <span class="post-created"> at ${created}.</span>
-                </div>
-                </header>
-                <section>
-                    <p>${text}</p>
-                </section>
-                <footer>
-                    
-                </footer>
-            </section>
-        `
+        this.postsElements.push(new PostElement(
+            singleObj['id'], singleObj['title'], singleObj['username'],
+            singleObj['created'], singleObj['post_text'],
+            this.container, position
+        ))
     }
 
     toggleNoMorePostsMessage() {
@@ -278,6 +341,7 @@ class PostsGetter {
         }
     }
 }
+
 
 
 /**
@@ -340,10 +404,11 @@ class GenericPostSender {
             else
                 this.callbackOnFailure()
             
+            this.callbackOnResponse()
+            
             this.unblockSubmit()
             if (typeof this.form.reset === 'function')
                 this.form.reset()
-            this.callbackOnResponse()
         }.bind(this), this.method, this.callbackGetParams())
     }
 
@@ -362,6 +427,10 @@ class GenericPostSender {
 
     getData(key) {
         return this.data[key]
+    }
+
+    getDataKeys() {
+        return Object.keys(this.data)
     }
 
 
@@ -383,8 +452,8 @@ class GenericPostSender {
                     shouldBlockSubmit
                 ))
             }
-            catch {
-                continue
+            catch (e) {
+                console.log(formQuery+': '+e)
             }
         }
         return forms
@@ -393,10 +462,16 @@ class GenericPostSender {
 
 
 
+const _STATIC_FACTORIES_FIELDS = {
+    editSenders: [],
+}
+
 class Factories {
     constructor() {
         throw 'Cannot instantiate Factories class'
     }
+
+
 
     static registerFormsFactory() {
 
@@ -415,7 +490,7 @@ class Factories {
             
             for (let dataKey of ['username', 'email', 'password', 'password_repeat']) {
                 if (!this.getData(dataKey))
-                    throw 'Items not found'
+                    throw 'Item not found: '+dataKey
             }
         }
 
@@ -445,6 +520,8 @@ class Factories {
         )
     }
 
+
+
     static loginFormsFactory() {
 
         var query = 'form.js-login-form'
@@ -461,7 +538,7 @@ class Factories {
             
             for (let dataKey of ['username', 'password', 'remember']) {
                 if (!this.getData(dataKey))
-                    throw 'Items not found'
+                    throw 'Item not found: '+dataKey
             }
         }
 
@@ -494,6 +571,8 @@ class Factories {
         )
     }
 
+
+
     static sendPostFactory() {
 
         var query = 'form.create-post-form'
@@ -509,7 +588,7 @@ class Factories {
             
             for (let dataKey of ['title_element', 'post_text_element']) {
                 if (!this.getData(dataKey))
-                    throw 'Items not found'
+                    throw 'Item not found: '+dataKey
             }
         }
 
@@ -548,6 +627,70 @@ class Factories {
         )
     }
 
+
+
+    static editPostFactory() {
+
+        var query = 'form.js-edit-post-form'
+
+        var route = '/requests/posts/edit/'
+        var method = 'post'
+        var shouldBlockSubmit = true
+
+        var callbackSetElements = function() {
+            this
+                .setData('id_element', this.form.querySelector('input[name="post-id"]'))
+                .setData('title_element', this.form.querySelector('input[name="title"]'))
+                .setData('post_text_element', this.form.querySelector('textarea[name="post-text"]'))
+            
+            for (let dataKey of ['id_element', 'title_element', 'post_text_element']) {
+                if (!this.getData(dataKey))
+                    throw 'Item not found: '+dataKey
+            }
+        }
+
+        var callbackGetParams = function() {
+            var id = this.getData('id_element').value
+            var postText = this.getData('post_text_element').value
+            var params = `id=${id}&post-text=${postText}`
+            return params
+        }
+
+        var callbackOnSuccess = function () {
+            PostElement.updatePostText(this.getData('id_element').value, this.getData('post_text_element').value)
+            Modal.closeAllModals()
+        }
+
+        var callbackOnFailure = function () {}
+        var callbackBeforeRequest = function () {}
+
+        var callbackCheckSuccess = function(statusCode) {
+            return (statusCode === 200)
+        }
+
+        var callbackOnResponse = function() {}
+        
+        var editSenders = GenericPostSender.getAllSenders(
+            query, route, method,
+            callbackSetElements, callbackGetParams, callbackCheckSuccess,
+            callbackOnSuccess, callbackOnFailure, callbackOnResponse, callbackBeforeRequest,
+            shouldBlockSubmit
+        )
+
+        _STATIC_FACTORIES_FIELDS.editSenders = [].concat(editSenders)
+        return editSenders
+    }
+
+    static updateEditForms(id, title, postText) {
+        for (let editSender of _STATIC_FACTORIES_FIELDS.editSenders) {
+            editSender.getData('id_element').value = id
+            editSender.getData('title_element').value = title
+            editSender.getData('post_text_element').innerText = postText
+        }
+    }
+
+
+
     static deleteUserFactory() {
 
         var query = 'form.js-delete-account-form'
@@ -563,7 +706,7 @@ class Factories {
             
             for (let dataKey of ['username', 'password']) {
                 if (!this.getData(dataKey))
-                    throw 'Items not found'
+                    throw 'Item not found: '+dataKey
             }
         }
 
@@ -594,6 +737,8 @@ class Factories {
             shouldBlockSubmit
         )
     }
+
+
 
     static logoutUserFactory() {
 
@@ -692,6 +837,7 @@ window.addEventListener('load', function() {
     section_objects.postSender = Factories.sendPostFactory()
     section_objects.loginForms = Factories.loginFormsFactory()
     section_objects.registerForms = Factories.registerFormsFactory()
+    section_objects.editPostFactory = Factories.editPostFactory()
     section_objects.deletePosts = Factories.deleteUserFactory()
     section_objects.logout = Factories.logoutUserFactory()
 })
