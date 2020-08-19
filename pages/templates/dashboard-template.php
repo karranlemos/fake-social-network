@@ -24,10 +24,22 @@ else {
       </div>
 
       <main class="dashboard">
-        <div class="create-post-box">
-          <button type="button" class="primary js-modal-opener" data-modal-name="create-post">Create Post</button>
-        </div>
+        <?php if(!$data['single-page']): ?>
+          <div class="functionality">
+            <button type="button" class="primary js-modal-opener" data-modal-name="create-post">Create Post</button>
+          </div>
+        <?php endif;?>
+
         <div class="main-dashboard-content" id="dashboard-posts-container"></div>
+
+        <?php if($data['single-page']): ?>
+          <div class="js-post-not-found-message hidden functionality">
+            <h2>Post does not exist.</h2>
+          </div>
+          <div class="functionality">
+            <a href="/"><button type="button" class="primary">See All Posts</button></a>
+          </div>
+        <?php endif;?>
       </main>
       
       <footer class="page-footer">Criado por Karran Lemos.</footer>

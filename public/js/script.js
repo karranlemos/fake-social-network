@@ -104,7 +104,7 @@ class NavMenu {
             menuButton.addEventListener('click', this.closeMenu.bind(this))
             if (menuButton.classList.contains('home-button')) {
                 menuButton.addEventListener('click', function() {
-                    location.reload(true)
+                    window.location.href = '/'
                 }.bind(this))
             }
         }
@@ -273,41 +273,97 @@ class PostsGetter {
         this.lastRequest = Date.now()-this.PERIOD_BETWEEN_REQUESTS
         
         this.postsElements = {}
+        
+        const postId = Helpers.getQueryValue('post-id')
+        if (postId === null)
+            this._setAutoGetter()
+        else
+            this._setSinglePage(postId)
 
+        _STATIC_POST_GETTER_FIELDS.postGetters.push(this)
+    }
+
+    _setAutoGetter() {
         window.addEventListener('scroll', function() {
             if (Date.now()-this.lastRequest < this.PERIOD_BETWEEN_REQUESTS)
                 return
             this.lastRequest = Date.now()
             if (window.outerHeight < this.container.getBoundingClientRect().bottom)
                 return
-            this.getAndLoadPosts()
+            this._getPagesPosts()
             
         }.bind(this))
 
-        this.getAndLoadPosts()
-
-        _STATIC_POST_GETTER_FIELDS.postGetters.push(this)
+        this._getPagesPosts()
     }
 
-    getAndLoadPosts() {
+    _getPagesPosts() {
         if (this.noMorePosts)
             return
 
-        var params = `page=${++this.page}&number-rows=${this.pageLength}`
-        Helpers.request(`/requests/posts/get/?${params}`, function(httpRequest) {
-            if (httpRequest.status !== 200)
-                return
-            if (httpRequest.responseText === '')
-                return
-                
+        const callbackCheckSuccess = function(status, responseText) {
+            return (status === 200 && responseText !== '')
+        }
+        const callbackOnSuccess = function(status, responseText) {
             try {
-                var jsonObj = JSON.parse(httpRequest.responseText)
+                var jsonObj = JSON.parse(responseText)
             }
             catch (e) {
                 return
             }
-
             this.loadPosts(jsonObj)
+        }
+        const callbackOnFailure = function() {}
+
+        this.getPosts(
+            `get-all&page=${++this.page}&number-rows=${this.pageLength}`,
+            callbackCheckSuccess,
+            callbackOnSuccess,
+            callbackOnFailure
+        )
+    }
+
+    _setSinglePage(postId) {
+        const callbackCheckSuccess = function(status, responseText) {
+            return (status === 200 && responseText !== '')
+        }
+        const callbackOnSuccess = function(status, responseText) {
+            try {
+                var jsonObj = JSON.parse(responseText)
+            }
+            catch (e) {
+                return
+            }
+            if (jsonObj.length > 0)
+                this.loadPosts(jsonObj)
+        }
+        const callbackOnFailure = function(status) {
+            if (status !== 404)
+                return
+            
+            const postNotFoundMessages = document.querySelectorAll('.js-post-not-found-message')
+            for (let postNotFoundMessage of postNotFoundMessages) {
+                postNotFoundMessage.classList.remove('hidden')
+            }
+        }
+
+        this.getPosts(
+            `post-id=${postId}`,
+            callbackCheckSuccess,
+            callbackOnSuccess,
+            callbackOnFailure
+        )
+    }
+
+
+
+    getPosts(params, callbackCheckSuccess, callbackOnSuccess, callbackOnFailure) {
+        Helpers.request(`/requests/posts/get/?${params}`, function(httpRequest) {
+            if (callbackCheckSuccess.bind(this)(httpRequest.status, httpRequest.responseText))
+                callbackOnSuccess.bind(this)(httpRequest.status, httpRequest.responseText)
+            else
+                callbackOnFailure.bind(this)(httpRequest.status, httpRequest.responseText)
+
         }.bind(this))
     }
 
@@ -903,6 +959,13 @@ class Helpers {
         if (!fromServer.hasOwnProperty(name))
             undefined
         return fromServer[name]
+    }
+
+
+
+    static getQueryValue(key) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(key);
     }
 }
 

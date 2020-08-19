@@ -417,13 +417,12 @@ main.dashboard {
 }
 
 main.dashboard .main-dashboard-content {
-    flex: 1 0;
     max-width: var(--dashboard-max-content-width);
     width: 100%;
 }
 
 main.dashboard .main-dashboard-content section.post,
-main.dashboard .create-post-box {
+main.dashboard .functionality {
     margin: 20px 0;
     padding: 20px;
     background-color: white;
@@ -437,9 +436,13 @@ main.dashboard .main-dashboard-content section.post footer {
     margin-top: 30px;
 }
 
-main.dashboard .create-post-box {
+main.dashboard .functionality {
     display: flex;
     justify-content: center;
+}
+
+main.dashboard .functionality.hidden {
+    display: none;
 }
 
 
