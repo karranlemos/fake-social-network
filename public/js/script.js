@@ -309,10 +309,23 @@ class GenericPostSender {
 
         this.blockedSubmit = false
         
-        this.form.addEventListener('submit', function(e) {
-            e.preventDefault()
-            this.send()
-        }.bind(this))
+        
+        const addEventFunction = {
+            FORM() {
+                this.form.addEventListener('submit', function(e) {
+                    e.preventDefault()
+                    this.send()
+                }.bind(this))
+            },
+            BUTTON() {
+                this.form.addEventListener('click', function(e) {
+                    e.preventDefault()
+                    this.send()
+                }.bind(this))
+            }
+        }[this.form.tagName] ?? function(){}
+
+        addEventFunction.bind(this)()
     }
 
     send() {
@@ -326,7 +339,8 @@ class GenericPostSender {
                 this.callbackOnFailure()
             
             this.unblockSubmit()
-            this.form.reset()
+            if (typeof this.form.reset === 'function')
+                this.form.reset()
             this.callbackOnResponse()
         }.bind(this), this.method, this.callbackGetParams())
     }
@@ -574,6 +588,41 @@ class Factories {
             shouldBlockSubmit
         )
     }
+
+    static logoutUserFactory() {
+
+        var query = 'button.js-logout'
+
+        var route = '/requests/user/logout/'
+        var method = 'post'
+        var shouldBlockSubmit = false
+
+        var callbackSetElements = function() {}
+
+        var callbackGetParams = function() {
+            var params = ''
+            return params
+        }
+
+        var callbackOnSuccess = function () {
+            location.reload('true')
+        }
+
+        var callbackOnFailure = function () {}
+
+        var callbackCheckSuccess = function(statusCode) {
+            return (statusCode === 200)
+        }
+
+        var callbackOnResponse = function() {}
+        
+        return GenericPostSender.getAllSenders(
+            query, route, method,
+            callbackSetElements, callbackGetParams, callbackCheckSuccess,
+            callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+            shouldBlockSubmit
+        )
+    }
 }
 
 
@@ -637,4 +686,5 @@ window.addEventListener('load', function() {
     section_objects.loginForms = Factories.loginFormsFactory()
     section_objects.registerForms = Factories.registerFormsFactory()
     section_objects.deletePosts = Factories.deleteUserFactory()
+    section_objects.logout = Factories.logoutUserFactory()
 })
