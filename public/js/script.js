@@ -272,7 +272,7 @@ class PostsGetter {
         this.noMorePosts = false
         this.lastRequest = Date.now()-this.PERIOD_BETWEEN_REQUESTS
         
-        this.postsElements = []
+        this.postsElements = {}
 
         window.addEventListener('scroll', function() {
             if (Date.now()-this.lastRequest < this.PERIOD_BETWEEN_REQUESTS)
@@ -325,11 +325,14 @@ class PostsGetter {
     loadPost(singleObj, position='beforeend') {
         if (!PostsGetter._checkSingleObj(singleObj))
             return
-        this.postsElements.push(new PostElement(
+        if (_STATIC_POST_ELEMENT_FIELDS.postElements.hasOwnProperty(singleObj['id']))
+            return
+
+        this.postsElements[singleObj['id']] = new PostElement(
             singleObj['id'], singleObj['title'], singleObj['username'],
             singleObj['created'], singleObj['post_text'],
             this.container, position
-        ))
+        )
     }
 
     toggleNoMorePostsMessage() {
