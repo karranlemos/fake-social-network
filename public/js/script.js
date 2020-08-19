@@ -1,27 +1,24 @@
 // Due to lack of support to static fields
 const _STATIC_MODAL_FIELDS = {
-    _modals: [],
+    _modals: {},
 }
 
 class Modal {
 
     constructor(modal) {
         this.modal = modal
+        if (!this.modal.classList.contains('js-modal'))
+            throw 'Not JS modal'
+        
+        this.modalName = this.modal.getAttribute('data-modal-name')
+        if (!this.modalName)
+            throw 'No modal name found'
+        if (_STATIC_MODAL_FIELDS._modals.hasOwnProperty(this.modalName))
+            throw 'Duplicated modal name'
+            
         this.buttonClose = this.modal.querySelector('.close')
         if (!this.buttonClose)
             throw 'Close button not found'
-        
-        var sectionElements = this.modal.querySelectorAll('.modal-content-container section')
-        this.sections = {}
-        for (let sectionElement of sectionElements) {
-            this._set_modal_section(sectionElement)
-        }
-
-        var modalOpenerElements = document.getElementsByClassName('modal-opener')
-        for (let modalOpenerElement of modalOpenerElements) {
-            this._set_modal_opener(modalOpenerElement)
-        }
-        this.currentModalName = ''
 
         this.buttonClose.addEventListener('click', this.closeModal.bind(this))
         this.modal.addEventListener('click', function(e) {
@@ -29,58 +26,37 @@ class Modal {
                 this.closeModal()
         }.bind(this))
 
-        _STATIC_MODAL_FIELDS._modals.push(this)
+        _STATIC_MODAL_FIELDS._modals[this.modalName] = this
     }
-
-    _set_modal_section(sectionElement) {
-        var modalName = sectionElement.getAttribute('data-modal-name')
-        if (!modalName)
-            return false
-
-        this.sections[modalName] = sectionElement
-        return true
-    }
-
-    _set_modal_opener(modalOpenerElement) {
-        var modalName = modalOpenerElement.getAttribute('data-modal-name')
-        if (!modalName || !this.sections.hasOwnProperty(modalName))
-            return false
-
-        modalOpenerElement.addEventListener('click', function() {
-            this.openModal(modalName)
-        }.bind(this))
-
-        return true
-    }
-
-
 
     closeModal() {
         this.modal.classList.remove('show')
-        this.sections[this.currentModalName].classList.remove('show')
-        this.currentModalName = ''
     }
 
-    openModal(modalName) {
+    openModal() {
         this.modal.classList.add('show')
-        this.sections[modalName].classList.add('show')
-        this.currentModalName = modalName
     }
 
 
     
     static closeAllModals() {
-        for (let modal of _STATIC_MODAL_FIELDS._modals) {
+        for (let modal of Object.values(_STATIC_MODAL_FIELDS._modals)) {
             modal.closeModal()
         }
     }
     
-    static addModalOpener(modalOpenerElement) {
-        for (let modal of _STATIC_MODAL_FIELDS._modals) {
-            if (modal._set_modal_opener(modalOpenerElement))
-                return true
-        }
-        return false
+    static addModalOpener(modalOpener) {
+        var modalName = modalOpener.getAttribute('data-modal-name')
+        if (!modalName)
+            return
+
+        var modal = _STATIC_MODAL_FIELDS._modals[modalName]
+        if (!modal)
+            return
+
+        modalOpener.addEventListener('click', function() {
+            modal.openModal()
+        })
     }
 
     static getAllModals() {
@@ -94,8 +70,20 @@ class Modal {
                 continue
             }
         }
+
+        Modal._setModalOpeners()
+
         return modals
     }
+
+    static _setModalOpeners() {
+        var modalOpeners = document.getElementsByClassName('js-modal-opener')
+        for (let modalOpener of modalOpeners) {
+            Modal.addModalOpener(modalOpener)
+        }
+    }
+
+
 }
 
 
@@ -208,7 +196,7 @@ class PostElement {
             return
 
         var buttons = `
-            <button type="button" class="js-edit primary modal-opener" data-modal-name="edit-post">Edit</button>
+            <button type="button" class="js-edit primary js-modal-opener" data-modal-name="edit-post">Edit</button>
             <button type="button" class="js-delete secondary" data-post-id="${this.post_id}">Delete</button>
         `
         footer.insertAdjacentHTML(

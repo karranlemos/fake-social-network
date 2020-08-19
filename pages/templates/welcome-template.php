@@ -17,8 +17,8 @@ else {
               <h1 class="logo">Fakebook</h1>
             </header>
             <div class="account-buttons">
-              <button type="button" class="primary modal-opener" data-modal-name="login">Login</button>
-              <button type="button" class="secondary modal-opener" data-modal-name="register">Register</button>
+              <button type="button" class="primary js-modal-opener" data-modal-name="login">Login</button>
+              <button type="button" class="secondary js-modal-opener" data-modal-name="register">Register</button>
             </div>
           </div>
         </section>
@@ -29,14 +29,14 @@ else {
 
     </div>
     
-    <div class="modal js-modal">
+    <div class="modal js-modal" data-modal-name="login">
       <div class="modal-popup">
         <header>
           <button class="close"></button>
         </header>
         <section class="modal-content-container">
 
-          <section class="" data-modal-name="login">
+          <section class="">
             <form action="" method="post" class="full-width-form js-login-form">
               <input type="text" name="username" placeholder="Username" class="input-block">
               <input type="password" name="password" placeholder="Password" class="input-block">
@@ -50,7 +50,18 @@ else {
             </form>
           </section>
 
-          <section class="" data-modal-name="register">
+        </section>
+      </div>
+    </div>
+
+    <div class="modal js-modal" data-modal-name="register">
+      <div class="modal-popup">
+        <header>
+          <button class="close"></button>
+        </header>
+        <section class="modal-content-container">
+
+          <section class="">
             <form action="" method="post" class="full-width-form js-register-form">
               <input type="text" name="username" placeholder="Username" class="input-block">
               <input type="email" name="email" placeholder="Email" class="input-block">

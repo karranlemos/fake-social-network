@@ -15,7 +15,7 @@ else {
             <button class="nav-button home-button logo">Fakebook</button>
             <div class="nav-options">
               <button class="nav-button home-button mobile-only">Home</button>
-              <button class="nav-button modal-opener" data-modal-name="settings">Settings</button>
+              <button class="nav-button js-modal-opener" data-modal-name="settings">Settings</button>
               <button class="nav-button js-logout" name="logout">Logout</button>
             </div>
             <button class="nav-button mobile-menu-button"></button>
@@ -25,7 +25,7 @@ else {
 
       <main class="dashboard">
         <div class="create-post-box">
-          <button type="button" class="primary modal-opener" data-modal-name="create-post">Create Post</button>
+          <button type="button" class="primary js-modal-opener" data-modal-name="create-post">Create Post</button>
         </div>
         <div class="main-dashboard-content" id="dashboard-posts-container"></div>
       </main>
@@ -34,14 +34,14 @@ else {
 
     </div>
     
-    <div class="modal js-modal">
-      <div class="modal-popup">
+    <div class="modal js-modal" data-modal-name="settings">
+      <div class="modal-popup modal-popup-big">
         <header>
           <button class="close"></button>
         </header>
         <section class="modal-content-container">
 
-          <section class="settings-popup" data-modal-name="settings">
+          <section class="settings-popup">
             <form action="" method="post" class="full-width-form js-delete-account-form">
               <h2>Delete account</h2>
               <input type="hidden" name="username" value="<?=$_SESSION['username']?>">
@@ -50,7 +50,18 @@ else {
             </form>
           </section>
 
-          <section class="settings-popup" data-modal-name="create-post">
+        </section>
+      </div>
+    </div>
+
+    <div class="modal js-modal" data-modal-name="create-post">
+      <div class="modal-popup modal-popup-big">
+        <header>
+          <button class="close"></button>
+        </header>
+        <section class="modal-content-container">
+
+          <section class="settings-popup">
             <form action="" method="post" class="create-post-form full-width-form">
               <input type="text" name="title" placeholder="Title" class="input-block" required>
               <textarea name="post-text" placeholder="Say something!" class="input-block" required></textarea>
@@ -58,7 +69,18 @@ else {
             </form>
           </section>
 
-          <section class="settings-popup" data-modal-name="edit-post">
+        </section>
+      </div>
+    </div>
+
+    <div class="modal js-modal" data-modal-name="edit-post">
+      <div class="modal-popup modal-popup-big">
+        <header>
+          <button class="close"></button>
+        </header>
+        <section class="modal-content-container">
+
+          <section class="settings-popup">
             <form action="" method="post" class="js-edit-post-form full-width-form">
               <input type="hidden" name="post-id" value="">
               <input type="text" name="title" placeholder="Title" class="input-block" disabled>
@@ -70,6 +92,8 @@ else {
         </section>
       </div>
     </div>
+
+
 
   <?php });
   echo $template->get_page();
