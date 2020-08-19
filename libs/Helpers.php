@@ -15,8 +15,10 @@ class Helpers {
     exit;
   }
 
-  public static function return_request_code($code, $message) {
+  public static function return_request_code($code, $message, $content_type=null) {
     http_response_code($code);
+    if (!is_null($content_type))
+      header('Content-type: text/plain;');
     echo $message;
     exit;
   }

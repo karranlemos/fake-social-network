@@ -80,6 +80,27 @@ class Posts {
     return $success;
   }
 
+  public function delete_post($id) {
+    $sql = 'DELETE FROM posts WHERE id = :id';
+
+    $success = $this->db
+      ->query($sql)
+      ->bind(':id', $id)
+      ->execute()
+    ;
+
+    return $success;
+  }
+
+  
+  
+  public function get_username_from_post($id) {
+    $post = $this->get_post($id);
+    if ($post === false)
+      return false;
+    return $post->username;
+  }
+
   public function create_post_username($username, $title='', $post_text=null, $media=null) {
     $user_data = (new Users())->get_user($username, 'username');
     return $this->create_post($user_data->id, $title, $post_text, $media);

@@ -209,7 +209,7 @@ class PostElement {
 
         var buttons = `
             <button type="button" class="js-edit primary modal-opener" data-modal-name="edit-post">Edit</button>
-            <button type="button" class="js-delete secondary">Delete</button>
+            <button type="button" class="js-delete secondary" data-post-id="${this.post_id}">Delete</button>
         `
         footer.insertAdjacentHTML(
             'beforeend',
@@ -217,12 +217,14 @@ class PostElement {
         )
 
         var buttonEdit = footer.querySelector('button.js-edit')
-        var buttonDelete = footer.querySelector('button.js-delete')
         
         Modal.addModalOpener(buttonEdit)
         buttonEdit.addEventListener('click', function() {
             Factories.updateEditForms(this.post_id, this.title, this.textElement.innerHTML)
         }.bind(this))
+
+        var buttonDelete = footer.querySelector('button.js-delete')
+        Factories.deletePostSingleFactory(buttonDelete)
     }
 
 
@@ -232,6 +234,14 @@ class PostElement {
     }
 
 
+
+    static deletePostText(postId) {
+        var post = _STATIC_POST_ELEMENT_FIELDS.postElements[postId]
+        if (!post)
+            return
+        post.node.remove()
+        delete _STATIC_POST_ELEMENT_FIELDS.postElements[postId]
+    }
 
     static updatePostText(postId, newText) {
         var postElement = _STATIC_POST_ELEMENT_FIELDS.postElements[postId]
@@ -464,6 +474,7 @@ class GenericPostSender {
 
 const _STATIC_FACTORIES_FIELDS = {
     editSenders: [],
+    deleteSenders: [],
 }
 
 class Factories {
@@ -691,6 +702,59 @@ class Factories {
 
 
 
+    static deletePostFactory() {
+        var query = 'button.js-delete'
+        var formsElements = document.querySelectorAll(query)
+        for (let formElement of formsElements) {
+            Factories.deletePostSingleFactory(formElement)
+        }
+    }
+
+    static deletePostSingleFactory(form) {
+
+        var route = '/requests/posts/delete/'
+        var method = 'post'
+        var shouldBlockSubmit = true
+
+        var callbackSetElements = function() {
+            this.setData('post-id', this.form.getAttribute('data-post-id'))
+            
+            for (let dataKey of ['post-id']) {
+                if (!this.getData(dataKey))
+                    throw 'Item not found: '+dataKey
+            }
+        }
+
+        var callbackGetParams = function() {
+            var params = `post-id=${this.getData('post-id')}`
+            return params
+        }
+
+        var callbackOnSuccess = function () {
+            PostElement.deletePostText(this.getData('post-id'))
+        }
+
+        var callbackOnFailure = function () {}
+        var callbackBeforeRequest = function () {}
+
+        var callbackCheckSuccess = function(statusCode) {
+            return (statusCode === 200)
+        }
+
+        var callbackOnResponse = function() {}
+        
+        var editSender = new GenericPostSender(
+            form, route, method,
+            callbackSetElements, callbackGetParams, callbackCheckSuccess,
+            callbackOnSuccess, callbackOnFailure, callbackOnResponse, callbackBeforeRequest,
+            shouldBlockSubmit
+        )
+
+        _STATIC_FACTORIES_FIELDS.deleteSenders.push(editSender)
+    }
+
+
+
     static deleteUserFactory() {
 
         var query = 'form.js-delete-account-form'
@@ -838,6 +902,7 @@ window.addEventListener('load', function() {
     section_objects.loginForms = Factories.loginFormsFactory()
     section_objects.registerForms = Factories.registerFormsFactory()
     section_objects.editPostFactory = Factories.editPostFactory()
+    section_objects.deletePostFactory = Factories.deletePostFactory()
     section_objects.deletePosts = Factories.deleteUserFactory()
     section_objects.logout = Factories.logoutUserFactory()
 })
