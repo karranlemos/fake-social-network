@@ -526,6 +526,52 @@ class Factories {
             shouldBlockSubmit
         )
     }
+
+    static deleteUserFactory() {
+
+        var query = 'form.js-delete-account-form'
+
+        var route = '/requests/user/delete/'
+        var method = 'post'
+        var shouldBlockSubmit = false
+
+        var callbackSetElements = function() {
+            this
+                .setData('username', this.form.querySelector('input[name="username"]'))
+                .setData('password', this.form.querySelector('input[name="password"]'))
+            
+            for (let dataKey of ['username', 'password']) {
+                if (!this.getData(dataKey))
+                    throw 'Items not found'
+            }
+        }
+
+        var callbackGetParams = function() {
+            var username = this.getData('username').value
+            var password = this.getData('password').value
+            var params = `username=${username}&password=${password}`
+            return params
+        }
+
+        var callbackOnSuccess = function () {
+            location.reload('true')
+        }
+
+        var callbackOnFailure = function () {}
+
+        var callbackCheckSuccess = function(statusCode) {
+            return (statusCode === 200)
+        }
+
+        var callbackOnResponse = function() {}
+        
+        return GenericPostSender.getAllSenders(
+            query, route, method,
+            callbackSetElements, callbackGetParams, callbackCheckSuccess,
+            callbackOnSuccess, callbackOnFailure, callbackOnResponse,
+            shouldBlockSubmit
+        )
+    }
 }
 
 
@@ -588,4 +634,5 @@ window.addEventListener('load', function() {
     section_objects.postSender = Factories.sendPostFactory()
     section_objects.loginForms = Factories.loginFormsFactory()
     section_objects.registerForms = Factories.registerFormsFactory()
+    section_objects.deletePosts = Factories.deleteUserFactory()
 })

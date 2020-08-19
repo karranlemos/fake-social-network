@@ -5,12 +5,19 @@
     --heading-color: #9c274a;
     --sub-heading-color: #fa8572;
 
+
+
     --button-bg-color: #c9c9c9;
     --button-color: #000000;
+    
     --button-bg-color-primary: #6c3779;
     --button-color-primary: #ffffff;
     --button-bg-color-secondary: #6c5fa7;
     --button-color-secondary: #ffffff;
+    --button-bg-color-warning: #2c0000;
+    --button-color-warning: white;
+
+
 
     --modal-popup-bg-color: var(--primary-bg-color);
 

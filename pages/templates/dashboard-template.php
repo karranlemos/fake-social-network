@@ -44,7 +44,12 @@ else {
         <section class="modal-content-container">
 
           <section class="settings-popup" data-modal-name="settings">
-            
+            <form action="" method="post" class="full-width-form js-delete-account-form">
+              <h2>Delete account</h2>
+              <input type="hidden" name="username" value="<?=$_SESSION['username']?>">
+              <input type="password" name="password" placeholder="Confirm Your Password" class="input-block" required>
+              <button type="submit" class="warning button-block">Delete Account</button>
+            </form>
           </section>
 
           <section class="settings-popup" data-modal-name="create-post">
