@@ -76,4 +76,10 @@ class Users {
 
     return password_verify($provided_password, $user->password);
   }
+
+  public function check_user_exists($username) {
+    if ($this->get_user($username) === false)
+      return false;
+    return true;
+  }
 }

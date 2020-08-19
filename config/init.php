@@ -16,7 +16,7 @@ foreach ($libs_paths as $lib_path) {
   require_once __ROOT__.'/libs/'.$lib_path.'.php';
 }
 
-if (Session::is_logged_in_session() && !Session::check_user_exists()) {
+if (Session::is_logged_in_session() && !Session::check_current_user_exists()) {
   Session::logout();
 }
 if (!Session::is_logged_in_session() && Session::has_logged_in_cookies()) {

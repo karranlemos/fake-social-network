@@ -45,12 +45,10 @@ class Session {
     return isset($_COOKIE['logged_in']);
   }
 
-  public static function check_user_exists() {
+  public static function check_current_user_exists() {
     if (!isset($_SESSION['username']))
       return false;
-    if ((new Users)->get_user($_SESSION['username']) === false)
-      return false;
     
-    return true;
+    return ((new Users)->check_user_exists($_SESSION['username']));
   }
 }
