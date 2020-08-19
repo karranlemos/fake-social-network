@@ -449,7 +449,7 @@ main.dashboard .functionality.hidden {
 
 /* Floating block */
 div.content.floating-block-container {
-    background: url('../images/backgrounds/bg-index.jpg') center/cover no-repeat;
+    background: #6c3779 url('../images/backgrounds/bg-index.jpg') center/cover no-repeat;
 }
 
 .floating-block-container .modal .modal-popup {
