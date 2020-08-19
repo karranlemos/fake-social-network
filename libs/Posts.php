@@ -64,7 +64,23 @@ class Posts {
       ->execute()
     ;
 
-    return $success;
+    if (!$success)
+      return false;
+    
+    return $this->get_newest_post_id();
+  }
+
+  public function get_newest_post_id() {
+    $sql = 'SELECT MAX(id) AS id FROM POSTS';
+
+    $post_data = $this->db
+      ->query($sql)
+      ->fetchOne()
+    ;
+
+    if ($post_data === false)
+      return false;
+    return $post_data->id;
   }
 
   public function update_post($id, $post_text) {

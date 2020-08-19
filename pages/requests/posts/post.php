@@ -12,9 +12,9 @@ $username = $_SESSION['username'];
 $title = $_POST['title'];
 $post_text = $_POST['post-text'];
 
-if ((new Posts)->create_post_username($username, $title, $post_text)) {
-  Helpers::return_request_code(201, "201 (Created): Post created successfully.");
-}
-else {
+$post_id = (new Posts)->create_post_username($username, $title, $post_text);
+if ($post_id === false) {
   Helpers::return_request_code(500, "500 (Internal Server Error): Couldn't create post.");
 }
+
+Helpers::return_request_code(201, '{"post_id":'.$post_id.'}', 'application/json');

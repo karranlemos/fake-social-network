@@ -398,9 +398,9 @@ class GenericPostSender {
         this.callbackBeforeRequest()
         Helpers.request(this.route, function(httpRequest) {
             if (this.callbackCheckSuccess(httpRequest.status))
-                this.callbackOnSuccess()
+                this.callbackOnSuccess(httpRequest.status, httpRequest.responseText)
             else
-                this.callbackOnFailure()
+                this.callbackOnFailure(httpRequest.status, httpRequest.responseText)
             
             this.callbackOnResponse()
             
@@ -598,9 +598,17 @@ class Factories {
             return params
         }
 
-        var callbackOnSuccess = function () {
+        var callbackOnSuccess = function (status, responseText) {
+            try {
+                var postId = JSON.parse(responseText)
+                postId = (postId['post_id'] !== undefined) ? postId['post_id'] : 0
+            }
+            catch {
+                var postId = 0
+            }
+
             PostsGetter.addPostAll({
-                id: 0,
+                id: postId,
                 username: Helpers.getFromServer('username'),
                 title: this.getData('title_element').value,
                 post_text: this.getData('post_text_element').value,
