@@ -26,6 +26,12 @@ class Modal {
                 this.closeModal()
         }.bind(this))
 
+        this.modal.tabIndex = 0
+        this.modal.addEventListener('keyup', function(e) {
+            if (e.key === 'Escape')
+                this.closeModal()
+        }.bind(this))
+
         _STATIC_MODAL_FIELDS._modals[this.modalName] = this
     }
 
@@ -35,6 +41,7 @@ class Modal {
 
     openModal() {
         this.modal.classList.add('show')
+        this.modal.focus()
     }
 
 
