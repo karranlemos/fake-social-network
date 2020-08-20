@@ -979,7 +979,7 @@ class Helpers {
 
 
 var section_objects = {}
-window.addEventListener('load', function() {
+document.addEventListener('DOMContentLoaded', function() {
     section_objects.modals = Modal.getAllModals()
     section_objects.navMenus = NavMenu.getAllNavMenus()
     try {
