@@ -94,6 +94,10 @@ button.close {
     font-family: 'Righteous', cursive;
 }
 
+.logo::after {
+    content: 'fakebook';
+}
+
 h1.logo {
     margin: 20px 0;
     font-size: 48px;

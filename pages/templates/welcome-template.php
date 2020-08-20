@@ -14,7 +14,7 @@ else {
         <section class="relevant">
           <div class="central-options">
             <header>
-              <h1 class="logo">Fakebook</h1>
+              <h1 class="logo"></h1>
             </header>
             <div class="account-buttons">
               <button type="button" class="primary js-modal-opener" data-modal-name="login">Login</button>
