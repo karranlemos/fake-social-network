@@ -16,6 +16,7 @@ else {
             <div class="nav-options">
               <button class="nav-button home-button mobile-only">Home</button>
               <button class="nav-button js-modal-opener" data-modal-name="settings">Settings</button>
+              <button class="nav-button js-modal-opener" data-modal-name="about">About</button>
               <button class="nav-button js-logout" name="logout">Logout</button>
             </div>
             <button class="nav-button mobile-menu-button"></button>
@@ -131,6 +132,24 @@ else {
               <input type="hidden" name="post-id" value="">
               <button type="submit" class="primary button-block">Delete?</button>
             </form>
+          </section>
+
+        </section>
+      </div>
+    </div>
+
+    <div class="modal js-modal" data-modal-name="about">
+      <div class="modal-popup modal-popup-big">
+        <header>
+          <button class="close"></button>
+        </header>
+        <section class="modal-content-container">
+
+          <section class="">
+            <h2>About</h2>
+            <p>Demo social media website created by Karran Lemos.</p>
+            <h3>External resources</h3>
+            <p>Icons <a href="/public/images/icons/external/minus-square-solid.svg">Minus Square Solid</a> and <a href="/public/images/icons/external/pen-square-solid.svg.svg">Pen Square Solid</a> created by <a href="https://fontawesome.com">The Font Awesome group</a> under their <a href="https://fontawesome.com/license">license</a>. The colors of the icons were modified for this project.</p>
           </section>
 
         </section>

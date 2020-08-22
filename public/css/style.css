@@ -10,7 +10,7 @@ html, body {
 }
 
 html, button, form input, form textarea {
-    font-size: 15px;
+    font-size: 16px;
     font-family: 'Noto Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -20,6 +20,14 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
     
+}
+
+h2 {
+    font-size: 28px;
+}
+
+h3 {
+    font-size: 20px;
 }
 
 footer.page-footer {
@@ -37,6 +45,10 @@ footer.page-footer {
 
 input {
     outline-width: 0;
+}
+
+a {
+    color: var(--a-color);
 }
 
 button {
@@ -234,6 +246,7 @@ body > .content {
 }
 
 .modal .modal-popup {
+    box-sizing: border-box;
     max-width: 400px;
     width: 100%;
     min-height: 200px;
@@ -264,7 +277,8 @@ body > .content {
 }
 
 .modal .modal-popup .modal-content-container {
-    padding: 10px 20px;
+    box-sizing: border-box;
+    padding: 25px 35px;
 }
 
 .modal .modal-popup .modal-content-container h2 {
@@ -488,7 +502,30 @@ main.dashboard .main-dashboard-content section.post.deleted {
 }
 
 main.dashboard .main-dashboard-content section.post footer {
+    display: flex;
+    justify-content: right;
     margin-top: 30px;
+}
+
+main.dashboard .main-dashboard-content section.post footer div.edit-icon,
+main.dashboard .main-dashboard-content section.post footer div.delete-icon {
+    display: inline-block;
+
+    background-size: 35px;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+main.dashboard .main-dashboard-content section.post footer div.edit-icon {
+    background-image: url('../images/icons/external/pen-square-solid.svg');
+}
+
+main.dashboard .main-dashboard-content section.post footer div.delete-icon {
+    background-image: url('../images/icons/external/minus-square-solid.svg');
 }
 
 main.dashboard .main-dashboard-content button.no-more-posts {

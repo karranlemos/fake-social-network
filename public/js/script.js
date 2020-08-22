@@ -219,21 +219,21 @@ class PostElement {
             return
 
         var buttons = `
-            <button type="button" class="js-edit primary js-modal-opener" data-modal-name="edit-post">Edit</button>
-            <button type="button" class="js-delete secondary js-modal-opener" data-modal-name="delete-post">Delete</button>
+            <div class="edit-icon js-edit js-modal-opener" data-modal-name="edit-post"></div>
+            <div class="delete-icon js-delete js-modal-opener" data-modal-name="delete-post"></div>
         `
         footer.insertAdjacentHTML(
             'beforeend',
             buttons
         )
 
-        var buttonEdit = footer.querySelector('button.js-edit')
+        var buttonEdit = footer.querySelector('.js-edit')
         Modal.addModalOpener(buttonEdit)
         buttonEdit.addEventListener('click', function() {
             Factories.updateEditForms(this.post_id, this.title, this.textElement.innerText)
         }.bind(this))
 
-        var buttonDelete = footer.querySelector('button.js-delete')
+        var buttonDelete = footer.querySelector('.js-delete')
         Modal.addModalOpener(buttonDelete)
         buttonDelete.addEventListener('click', function() {
             Factories.updateDeleteForms(this.post_id)
