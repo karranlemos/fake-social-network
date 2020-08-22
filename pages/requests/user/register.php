@@ -18,8 +18,19 @@ if ($username === '') {
   Helpers::return_request_json_message(422, "Username cannot be empty");
 }
 
+if (!preg_match("/^[a-zA-Z0-9_\-]*$/", $username)) {
+  Helpers::return_request_json_message(
+    422,
+    "Usernames can only have letters, digits, underscores '_' and hyphens '-'"
+  );
+}
+
 if ($email === '') {
   Helpers::return_request_json_message(422, "Email cannot be empty");
+}
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  Helpers::return_request_json_message(422, "Invalid email syntax");
 }
 
 if ($password !== $password_repeat) {
@@ -28,6 +39,10 @@ if ($password !== $password_repeat) {
 
 if ($password === '') {
   Helpers::return_request_json_message(422, "Password cannot be empty.");
+}
+
+if (strlen($password) < 5) {
+  Helpers::return_request_json_message(422, "Password must have at least 5 characters.");
 }
 
 
