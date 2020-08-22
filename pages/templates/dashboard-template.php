@@ -56,6 +56,8 @@ else {
           <section class="settings-popup">
             <form action="" method="post" class="full-width-form js-delete-account-form">
               <h2>Delete account</h2>
+              <div class="js-errors-container"></div>
+              
               <input type="hidden" name="username" value="<?=$_SESSION['username']?>">
               <input type="password" name="password" placeholder="Confirm Your Password" class="input-block" required>
               <button type="submit" class="warning button-block">Delete Account</button>

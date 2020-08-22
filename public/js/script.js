@@ -923,8 +923,9 @@ class Factories {
             this
                 .setData('username', this.form.querySelector('input[name="username"]'))
                 .setData('password', this.form.querySelector('input[name="password"]'))
+                .setData('errorsContainer', this.form.querySelector('.js-errors-container'))
             
-            for (let dataKey of ['username', 'password']) {
+            for (let dataKey of ['username', 'password', 'errorsContainer']) {
                 if (!this.getData(dataKey))
                     throw 'Item not found: '+dataKey
             }
@@ -941,7 +942,7 @@ class Factories {
             location.reload('true')
         }
 
-        var callbackOnFailure = function () {}
+        var callbackOnFailure = Factories.messageBoxFactory()
         var callbackBeforeRequest = function () {}
 
         var callbackCheckSuccess = function(statusCode) {
