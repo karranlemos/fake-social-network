@@ -432,7 +432,7 @@ class PostsGetter {
 
 const _STATIC_MESSAGE_BOX_FIELDS = {
     messages: [
-        'error',
+        'failure',
         'success',
         'neutral',
     ],
@@ -444,10 +444,11 @@ const _STATIC_MESSAGE_BOX_FIELDS = {
 
 class MessageBox {
 
-    constructor(message, status='newtral') {
+    constructor(message, status='neutral') {
         this.message = message
         if (!_STATIC_MESSAGE_BOX_FIELDS.messages.includes(status))
             throw `'status' should be in ['${_STATIC_MESSAGE_BOX_FIELDS.join("', '")}']`
+        this.status = status
     }
 
     createBox(parent, position='afterbegin') {
@@ -662,8 +663,9 @@ class Factories {
                 .setData('username', this.form.querySelector('input[name="username"]'))
                 .setData('password', this.form.querySelector('input[name="password"]'))
                 .setData('remember', this.form.querySelector('input[name="remember"]'))
+                .setData('errorsContainer', this.form.querySelector('.js-errors-container'))
             
-            for (let dataKey of ['username', 'password', 'remember']) {
+            for (let dataKey of ['username', 'password', 'remember', 'errorsContainer']) {
                 if (!this.getData(dataKey))
                     throw 'Item not found: '+dataKey
             }
@@ -677,11 +679,11 @@ class Factories {
             return params
         }
 
-        var callbackOnSuccess = function() {
+        var callbackOnSuccess = function(status, message) {
             location.reload(true)
         }
 
-        var callbackOnFailure = function() {}
+        var callbackOnFailure = Factories.messageBoxFactory('failure')
         var callbackBeforeRequest = function() {}
 
         var callbackCheckSuccess = function(statusCode) {
@@ -969,6 +971,27 @@ class Factories {
             callbackOnSuccess, callbackOnFailure, callbackOnResponse, callbackBeforeRequest,
             shouldBlockSubmit
         )
+    }
+
+
+
+    static messageBoxFactory(type='failure') {
+        return function(status, message) {
+            var errorsContainer = this.getData('errorsContainer')
+            
+            while (errorsContainer.firstChild)
+                errorsContainer.removeChild(errorsContainer.firstChild)
+
+            try {
+                let jsonMessage = JSON.parse(message)
+                message = (jsonMessage.message !== undefined) ? jsonMessage.message : ''
+            }
+            catch {
+                message = 'Could not parse JSON.'
+            }
+
+            new MessageBox(message, type).createBox(errorsContainer, 'afterbegin')
+        }
     }
 }
 
