@@ -84,6 +84,8 @@ else {
               <input type="text" name="title" placeholder="Title" class="input-block" required>
               <textarea name="post-text" placeholder="Say something!" class="input-block"></textarea>
               <button type="submit" name="create-post" class="primary button-block">Submit</button>
+
+              <p class="warning">Attention: this is a demo. To avoid misuse due to the lack of moderation, all text will be converted to Lorem Ipsum in the backend.</p>
             </form>
           </section>
 
@@ -106,6 +108,8 @@ else {
               <input type="text" name="title" placeholder="Title" class="input-block" disabled>
               <textarea name="post-text" placeholder="Say something!" class="input-block"></textarea>
               <button type="submit" class="primary button-block">Update</button>
+
+              <p class="warning">Attention: this is a demo. To avoid misuse due to the lack of moderation, all text will be converted to Lorem Ipsum in the backend.</p>
             </form>
           </section>
 

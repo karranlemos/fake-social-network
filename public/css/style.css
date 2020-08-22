@@ -47,7 +47,7 @@ button {
     color: var(--button-color);
 
     min-width: 200px;
-    min-height: 30px;
+    min-height: 40px;
 
     cursor: pointer;
 }
@@ -118,6 +118,12 @@ h1.logo {
 
 .full-center h1 {
     margin-bottom: 30px;
+}
+
+p.warning {
+    margin: 10px;
+    text-align: center;
+    font-size: 14px;
 }
 
 
@@ -236,6 +242,10 @@ body > .content {
 
 .modal .modal-popup.modal-popup-big {
     max-width: 700px;
+}
+
+.modal .modal-popup.modal-popup-big textarea {
+    height: 200px;
 }
 
 .modal .modal-popup header {
@@ -490,10 +500,16 @@ main.dashboard .main-dashboard-content button.no-more-posts {
 main.dashboard .functionality {
     display: flex;
     justify-content: center;
+    flex-direction: column;
 }
 
 main.dashboard .functionality.hidden {
     display: none;
+}
+
+main.dashboard .functionality button {
+    width: 100%;
+    min-height: 50px;
 }
 
 h2.post-title {
