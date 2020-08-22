@@ -184,7 +184,7 @@ class PostElement {
         
         window.setTimeout(function() {
             newNode.classList.remove('hidden')
-        }, 10)
+        }, 100)
         return newNode
     }
 

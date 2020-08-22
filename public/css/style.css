@@ -351,6 +351,7 @@ nav.dashboard {
     display: flex;
     justify-content: center;
     position: fixed;
+    z-index: 1000;
     width: 100%;
 
     height: var(--nav-height);
@@ -445,6 +446,7 @@ main.dashboard {
 main.dashboard .main-dashboard-content {
     max-width: var(--dashboard-max-content-width);
     width: 100%;
+    z-index: 1;
 }
 
 main.dashboard .main-dashboard-content section.post,
