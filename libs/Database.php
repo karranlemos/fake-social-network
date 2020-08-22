@@ -23,7 +23,29 @@ class Database {
     catch (PDOException $e) {
       throw $e;
     }
+
+    // throws exception if failed.
+    $this->create_tables_if_needed();
   }
+
+  private function create_tables_if_needed() {
+    $tables = [
+      'users' => $this->query("SHOW TABLES LIKE 'users'")->fetchAll(),
+      'posts' => $this->query("SHOW TABLES LIKE 'posts'")->fetchAll(),
+      'users_authentication' => $this->query("SHOW TABLES LIKE 'users_authentication'")->fetchAll(),
+    ];
+
+    foreach ($tables as $name => $table) {
+      if (count($table) > 0)
+        continue;
+
+      $creation_script = file_get_contents(__ROOT__.'/misc/database/'.$name.'.sql');
+      if ($creation_script === false)
+        throw new Exception("Couldn't create database.");
+      $this->query($creation_script)->execute();
+    }
+  }
+
 
   public function query($query) {
     $this->statement = $this->db_handler->prepare($query);
