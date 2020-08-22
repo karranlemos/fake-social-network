@@ -8,6 +8,8 @@ if (!isset($_GET['get-all']) && !isset($_GET['post-id'])) {
   Helpers::return_request_code(422, "422 (Unprocessable Entity): either 'get-all' or 'post-id' must be set.");
 }
 
+$posts = Posts::get_instance();
+
 if (isset($_GET['get-all'])) {
   if (!isset($_GET['page']) || !isset($_GET['number-rows'])) {
     Helpers::return_request_code(422, "422 (Unprocessable Entity): 'page', 'number-rows' missing.");
@@ -15,7 +17,6 @@ if (isset($_GET['get-all'])) {
 
   $page = $_GET['page'];
   $number_rows = $_GET['number-rows'];
-  $posts = Posts::get_instance();
 
   try {
     $postsObj = $posts->get_posts($page, $number_rows);
