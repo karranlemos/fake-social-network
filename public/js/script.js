@@ -716,8 +716,9 @@ class Factories {
             this
                 .setData('title_element', this.form.querySelector('input[name="title"]'))
                 .setData('post_text_element', this.form.querySelector('textarea[name="post-text"]'))
+                .setData('errorsContainer', this.form.querySelector('.js-errors-container'))
             
-            for (let dataKey of ['title_element', 'post_text_element']) {
+            for (let dataKey of ['title_element', 'post_text_element', 'errorsContainer']) {
                 if (!this.getData(dataKey))
                     throw 'Item not found: '+dataKey
             }
@@ -750,7 +751,7 @@ class Factories {
             Modal.closeAllModals()
         }
 
-        var callbackOnFailure = function () {}
+        var callbackOnFailure = Factories.messageBoxFactory('failure')
         var callbackBeforeRequest = function () {}
 
         var callbackCheckSuccess = function(statusCode) {
