@@ -39,6 +39,7 @@ else {
           <section class="">
             <form action="" method="post" class="full-width-form js-login-form">
               <div class="js-errors-container"></div>
+              
               <input type="text" name="username" placeholder="Username" class="input-block">
               <input type="password" name="password" placeholder="Password" class="input-block">
               <div class="checkbox-container">
@@ -64,6 +65,8 @@ else {
 
           <section class="">
             <form action="" method="post" class="full-width-form js-register-form">
+              <div class="js-errors-container"></div>
+
               <input type="text" name="username" placeholder="Username" class="input-block">
               <input type="email" name="email" placeholder="Email" class="input-block">
               <input type="password" name="password" placeholder="Password" class="input-block">

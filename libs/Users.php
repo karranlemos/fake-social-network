@@ -85,6 +85,12 @@ class Users {
     return true;
   }
 
+  public function check_email_exists($email) {
+    if ($this->get_user($email, 'email') === false)
+      return false;
+    return true;
+  }
+
 
 
   public function get_instance() {

@@ -9,10 +9,36 @@ foreach (['username', 'email', 'password', 'password-repeat'] as $name) {
     Helpers::return_request_json_message(422, "'".$name."' missing.");
 }
 
-if ($_POST['password'] !== $_POST['password-repeat']) {
-  Helpers::return_request_json_message(400, "Passwords don't match.");
+$username = $_POST['username'];
+$email = $_POST['email'];
+$password = $_POST['password'];
+$password_repeat = $_POST['password-repeat'];
+
+if ($username === '') {
+  Helpers::return_request_json_message(422, "Username cannot be empty");
 }
 
-Users::get_instance()->create_user($_POST['username'], $_POST['email'], $_POST['password']);
+if ($email === '') {
+  Helpers::return_request_json_message(422, "Email cannot be empty");
+}
+
+if ($password !== $password_repeat) {
+  Helpers::return_request_json_message(422, "Passwords don't match.");
+}
+
+if ($password === '') {
+  Helpers::return_request_json_message(422, "Password cannot be empty.");
+}
+
+
+$user = Users::get_instance();
+if ($user->check_user_exists($username)) {
+  Helpers::return_request_json_message(422, "Username already exists");
+}
+if ($user->check_email_exists($email)) {
+  Helpers::return_request_json_message(422, "Email already exists");
+}
+
+$user->create_user($username, $email, $password);
 
 Helpers::return_request_json_message(201, 'Registered.');
