@@ -11,11 +11,15 @@ define('DB_PASSWORD', '');
 define('DB_NAME', 'fake-social-media');
 
 
-$libs_paths = ['Template', 'Database', 'Posts', 'Users', 'UsersAuth', 'Helpers', 'Session'];
+$libs_paths = [
+  'Template', 'Database', 'Posts', 'Users', 'UsersAuth', 'Helpers', 'Session',
+  'LoremIpsum',
+];
 
 foreach ($libs_paths as $lib_path) {
   require_once __ROOT__.'/libs/'.$lib_path.'.php';
 }
+
 
 
 try {
