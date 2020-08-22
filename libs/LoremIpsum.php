@@ -248,7 +248,7 @@ class LoremIpsum {
 
     $last_char = $text[strlen($text)-1];
     switch ($last_char) {
-      case '.': case '\n':
+      case '.': case '\n': case ' ':
         break;
       default:
         $text .= '.';
