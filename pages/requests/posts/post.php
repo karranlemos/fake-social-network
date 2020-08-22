@@ -16,6 +16,13 @@ if ($title === '') {
   Helpers::return_request_json_message(422, "Title cannot be empty.");
 }
 
+
+if (defined('__DEMO_MAKE_DUMMY_TEXT__')) {
+  $title = LoremIpsum::random_text(strlen($title));
+  $post_text = LoremIpsum::random_text(strlen($post_text));
+}
+
+
 $post_id = Posts::get_instance()->create_post_username($username, $title, $post_text);
 if ($post_id === false) {
   Helpers::return_request_json_message(500, "Couldn't create post.");

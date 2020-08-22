@@ -18,6 +18,12 @@ $username = $_SESSION['username'];
 $post_id = $_POST['id'];
 $post_text = $_POST['post-text'];
 
+
+if (defined('__DEMO_MAKE_DUMMY_TEXT__')) {
+  $post_text = LoremIpsum::random_text(strlen($post_text));
+}
+
+
 if ($posts->update_post($post_id, $post_text)) {
   Helpers::return_request_json_message(200, "Post updated successfully.");
 }

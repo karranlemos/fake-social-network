@@ -10,6 +10,9 @@ define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 define('DB_NAME', 'fake-social-media');
 
+// Turns posted text into dummy text.
+define('__DEMO_MAKE_DUMMY_TEXT__', '');
+
 
 $libs_paths = [
   'Template', 'Database', 'Posts', 'Users', 'UsersAuth', 'Helpers', 'Session',

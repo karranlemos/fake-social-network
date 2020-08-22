@@ -227,6 +227,9 @@ class LoremIpsum {
         $new_text = ucfirst($new_text);
         $first_word = false;
       }
+      else {
+        $new_text = ' '.$new_text;
+      }
 
       if (--$words_before_newline <= 0) {
         $new_text .= '.\n';
@@ -239,11 +242,17 @@ class LoremIpsum {
         $words_before_point = self::generate_number_words_before_point();
         $first_word = true;
       }
-      else {
-        $new_text .= ' ';
-      }
 
       $text .= $new_text;
+    }
+
+    $last_char = $text[strlen($text)-1];
+    switch ($last_char) {
+      case '.': case '\n':
+        break;
+      default:
+        $text .= '.';
+        break;
     }
 
     return $text;

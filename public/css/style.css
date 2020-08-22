@@ -436,6 +436,7 @@ nav.dashboard .nav-container button.mobile-menu-button {
 main.dashboard {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 
     width: 100%;
     max-width: var(--dashboard-max-content-width);
@@ -446,6 +447,7 @@ main.dashboard {
 main.dashboard .main-dashboard-content {
     max-width: var(--dashboard-max-content-width);
     width: 100%;
+    overflow: hidden;
     z-index: 1;
 }
 
@@ -458,6 +460,9 @@ main.dashboard .functionality {
 
 main.dashboard .main-dashboard-content section.post {
     min-height: 200px;
+    max-width: 100%;
+    overflow: hidden;
+    word-wrap: pre-wrap;
     
     opacity: 1;
     transition: opacity 0.8s;
