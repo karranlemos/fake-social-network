@@ -232,7 +232,7 @@ class LoremIpsum {
       }
 
       if ($can_have_paragraph && --$words_before_newline <= 0) {
-        $new_text .= '.<br>';
+        $new_text .= ".\n\n";
         $words_before_newline = self::generate_number_words_before_newline();
         $words_before_point = self::generate_number_words_before_point();
         $first_word = true;
@@ -248,7 +248,7 @@ class LoremIpsum {
 
     $last_char = $text[strlen($text)-1];
     switch ($last_char) {
-      case '.': case '<br>': case ' ':
+      case '.': case "\n\n": case ' ':
         break;
       default:
         $text .= '.';

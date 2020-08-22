@@ -201,7 +201,7 @@ class PostElement {
                 </div>
                 </header>
                 <section>
-                    <p>${text}</p>
+                    <p>${text.replaceAll('\n', '<br>')}</p>
                 </section>
                 <footer>
                     
@@ -230,7 +230,7 @@ class PostElement {
         var buttonEdit = footer.querySelector('button.js-edit')
         Modal.addModalOpener(buttonEdit)
         buttonEdit.addEventListener('click', function() {
-            Factories.updateEditForms(this.post_id, this.title, this.textElement.innerHTML)
+            Factories.updateEditForms(this.post_id, this.title, this.textElement.innerText)
         }.bind(this))
 
         var buttonDelete = footer.querySelector('button.js-delete')
@@ -849,7 +849,7 @@ class Factories {
         for (let editSender of _STATIC_FACTORIES_FIELDS.editSenders) {
             editSender.getData('id_element').value = id
             editSender.getData('title_element').value = title
-            editSender.getData('post_text_element').innerText = postText
+            editSender.getData('post_text_element').innerHTML = postText
         }
     }
 
