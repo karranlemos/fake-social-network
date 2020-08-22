@@ -449,6 +449,16 @@ main.dashboard .functionality.hidden {
     display: none;
 }
 
+h2.post-title {
+    color: var(--post-link-color);
+}
+
+a.post-link-title, a.post-link-title:focus,
+a.post-link-title:hover, a.post-link-title:visited {
+    text-decoration: none;
+    color: inherit;
+}
+
 
 
 /* Floating block */

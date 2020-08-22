@@ -147,13 +147,13 @@ const _STATIC_POST_ELEMENT_FIELDS = {
 }
 
 class PostElement {
-    constructor(post_id, title, username, created, text, parentNode, position='beforeend') {
+    constructor(post_id, title, username, created, text, parentNode, position='beforeend', addLink=true) {
         if (!['beforeend', 'afterbegin'].includes(position))
             throw "Position must be 'beforeend' or 'afterstart'."
         
         created = this._format_date_string(created)
 
-        var html = this._createPostHTML(post_id, title, username, created, text)
+        var html = this._createPostHTML(post_id, title, username, created, text, addLink)
         this.node = this._createPostNode(html, parentNode, position)
 
         this.post_id = post_id
@@ -176,11 +176,13 @@ class PostElement {
             return parentNode.querySelector('section.post:last-child')
     }
 
-    _createPostHTML(post_id, title, username, created, text) {
+    _createPostHTML(post_id, title, username, created, text, addLink) {
+        if (addLink)
+            title = `<a href="/dashboard/?post-id=${post_id}" class="post-link-title">${title}</a>`
         return `
             <section class="post" data-post-id="${post_id}" data-username="${username}">
                 <header>
-                <h2>${title}</h2>
+                <h2 class="post-title">${title}</h2>
                 <div class="post-data">
                     <span class="post-username">Posted by <em>${username!==null ? username : '[deleted]'}</em></span>
                     <span class="post-created"> at ${created}.</span>
@@ -341,8 +343,8 @@ class PostsGetter {
             catch (e) {
                 return
             }
-            if (jsonObj.length > 0)
-                this.loadPosts(jsonObj)
+            if (jsonObj.length === 1)
+                this.loadPost(jsonObj[0], 'beforeend', false)
         }
         const callbackOnFailure = function(status) {
             if (status !== 404)
@@ -385,7 +387,7 @@ class PostsGetter {
         }
     }
 
-    loadPost(singleObj, position='beforeend') {
+    loadPost(singleObj, position='beforeend', addLink=true) {
         if (!PostsGetter._checkSingleObj(singleObj))
             return
         if (_STATIC_POST_ELEMENT_FIELDS.postElements.hasOwnProperty(singleObj['id']))
@@ -394,7 +396,7 @@ class PostsGetter {
         this.postsElements[singleObj['id']] = new PostElement(
             singleObj['id'], singleObj['title'], singleObj['username'],
             singleObj['created'], singleObj['post_text'],
-            this.container, position
+            this.container, position, addLink
         )
     }
 

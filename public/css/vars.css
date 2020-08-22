@@ -35,6 +35,8 @@
     --dashboard-nav-bg-color: var(--primary-theme-color);
     --dashboard-nav-color: white;
 
+    --post-link-color: #54285f;
+
 
     --z-index-menu: 1001;
     --z-index-modal: 1000;
