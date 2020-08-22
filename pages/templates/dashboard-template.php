@@ -76,7 +76,7 @@ else {
           <section class="settings-popup">
             <form action="" method="post" class="create-post-form full-width-form">
               <div class="js-errors-container"></div>
-              
+
               <input type="text" name="title" placeholder="Title" class="input-block" required>
               <textarea name="post-text" placeholder="Say something!" class="input-block"></textarea>
               <button type="submit" name="create-post" class="primary button-block">Submit</button>
@@ -118,6 +118,8 @@ else {
 
           <section class="settings-popup">
             <form action="" method="post" class="js-delete-post-form full-width-form">
+              <div class="js-errors-container"></div>
+              
               <input type="hidden" name="post-id" value="">
               <button type="submit" class="primary button-block">Delete?</button>
             </form>

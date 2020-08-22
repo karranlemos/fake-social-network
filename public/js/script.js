@@ -862,7 +862,9 @@ class Factories {
         var shouldBlockSubmit = true
         
         var callbackSetElements = function() {
-            this.setData('post-id', this.form.querySelector('input[name=post-id]'))
+            this
+                .setData('post-id', this.form.querySelector('input[name=post-id]'))
+                .setData('errorsContainer', this.form.querySelector('.js-errors-container'))
             
             for (let dataKey of ['post-id']) {
                 if (!this.getData(dataKey))
@@ -877,11 +879,12 @@ class Factories {
 
         var callbackOnSuccess = function () {
             PostElement.deletePostContent(this.getData('post-id').value)
+            Factories.messageBoxCleanerFactory().bind(this)()
             this.form.reset()
             Modal.closeAllModals()
         }
 
-        var callbackOnFailure = function () {}
+        var callbackOnFailure = Factories.messageBoxFactory('failure')
         var callbackBeforeRequest = function () {}
 
         var callbackCheckSuccess = function(statusCode) {
