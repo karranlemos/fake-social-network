@@ -430,6 +430,46 @@ class PostsGetter {
 
 
 
+const _STATIC_MESSAGE_BOX_FIELDS = {
+    messages: [
+        'error',
+        'success',
+        'neutral',
+    ],
+    positions: [
+        'afterbegin',
+        'beforeend',
+    ]
+}
+
+class MessageBox {
+
+    constructor(message, status='newtral') {
+        this.message = message
+        if (!_STATIC_MESSAGE_BOX_FIELDS.messages.includes(status))
+            throw `'status' should be in ['${_STATIC_MESSAGE_BOX_FIELDS.join("', '")}']`
+    }
+
+    createBox(parent, position='afterbegin') {
+        var html = this.createHTML()
+        this.addToParent(html, parent, position)
+    }
+
+    createHTML() {
+        var html = 
+            `<div class="message-box ${this.status}">${this.message}</div>`
+        return html
+    }
+
+    addToParent(html, parent, position='afterbegin') {
+        if (!_STATIC_MESSAGE_BOX_FIELDS.positions.includes(position))
+            throw `Position must be in ['${_STATIC_MESSAGE_BOX_FIELDS.positions.join("', '")}']`
+        parent.insertAdjacentHTML(position, html)
+    }
+}
+
+
+
 /**
  * Holds a form, submits the form and does
  * something upon success or failure.
