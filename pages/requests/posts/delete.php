@@ -8,7 +8,7 @@ if (!isset($_POST['post-id'])) {
   Helpers::return_request_code(422, "422 (Unprocessable Entity): 'post-id'");
 }
 
-$posts = new Posts;
+$posts = Posts::get_instance();
 $username_from_post_id = $posts->get_username_from_post($_POST['post-id']);
 
 if ($username_from_post_id === false) {

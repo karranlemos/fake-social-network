@@ -15,9 +15,10 @@ if (isset($_GET['get-all'])) {
 
   $page = $_GET['page'];
   $number_rows = $_GET['number-rows'];
+  $posts = Posts::get_instance();
 
   try {
-    $postsObj = (new Posts())->get_posts($page, $number_rows);
+    $postsObj = $posts->get_posts($page, $number_rows);
   }
   catch (Exception $err) {
     Helpers::return_request_code(500, "500 (Internal Server Error): Couldn't fetch posts.");
@@ -28,7 +29,7 @@ else if (isset($_GET['post-id'])) {
   $post_id = $_GET['post-id'];
 
   try {
-    $postsObj = (new Posts())->get_post($post_id);
+    $postsObj = $posts->get_post($post_id);
   }
   catch (Exception $err) {
     Helpers::return_request_code(500, "500 (Internal Server Error): Couldn't fetch post.");

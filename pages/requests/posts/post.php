@@ -12,7 +12,7 @@ $username = $_SESSION['username'];
 $title = $_POST['title'];
 $post_text = $_POST['post-text'];
 
-$post_id = (new Posts)->create_post_username($username, $title, $post_text);
+$post_id = Posts::get_instance()->create_post_username($username, $title, $post_text);
 if ($post_id === false) {
   Helpers::return_request_code(500, "500 (Internal Server Error): Couldn't create post.");
 }

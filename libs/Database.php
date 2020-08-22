@@ -6,10 +6,12 @@ class Database {
   const DB_PASSWORD = DB_PASSWORD;
   const DB_NAME = DB_NAME;
 
+  private static $instance = null;
+
   private $db_handler;
   private $statement;
 
-  public function __construct() {
+  private function __construct() {
     $dsn = sprintf('mysql:host=%s;dbname=%s', self::DB_HOST, self::DB_NAME);
     $options = [
       PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -55,5 +57,16 @@ class Database {
   public function fetchOne() {
     $this->execute();
     return $this->statement->fetch(PDO::FETCH_OBJ);
+  }
+
+
+
+  public function get_instance() {
+    if (self::$instance === null) {
+      // throws exception on failure
+      self::$instance = new self;
+    }
+
+    return self::$instance;
   }
 }

@@ -13,7 +13,7 @@ class Session {
       return false;
     }
     [$username, $token] = [$cookie[0], $cookie[1]];
-    $token_correct = (new UsersAuth())->check_token($username, $token);
+    $token_correct = UsersAuth()::get_instance()->check_token($username, $token);
     if (!$token_correct) {
       setcookie('logged_in', '', time()-30, '/'); 
     }
@@ -49,6 +49,6 @@ class Session {
     if (!isset($_SESSION['username']))
       return false;
     
-    return ((new Users)->check_user_exists($_SESSION['username']));
+    return (Users::get_instance()->check_user_exists($_SESSION['username']));
   }
 }

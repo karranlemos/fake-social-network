@@ -8,7 +8,7 @@ if (!isset($_POST['id']) || !isset($_POST['post-text'])) {
   Helpers::return_request_code(422, "422 (Unprocessable Entity): 'id', 'post-text' missing.");
 }
 
-$posts = new Posts;
+$posts = Posts::get_instance();
 
 if ($posts->get_post($_POST['id']) === false) {
   Helpers::return_request_code(400, "400 (Internal Server Error): post doesn't exist.");

@@ -4,9 +4,11 @@ class UsersAuth {
 
   const ROWS_PER_PAGE = 20;
 
+  private static $instance = null;
+
   private $db;
-  public function __construct() {
-    $this->db = new Database();
+  private function __construct() {
+    $this->db = Database::get_instance();
   }
 
   public function create_token($username, $token=null) {
@@ -14,7 +16,7 @@ class UsersAuth {
       $token = Helpers::generate_token();
     }
 
-    $user = (new Users())->get_user($username);
+    $user = Users::get_instance()->get_user($username);
 
     $sql = 'INSERT INTO users_authentication (id_user, token) VALUES (:id_user, :token)';
 
@@ -29,7 +31,7 @@ class UsersAuth {
   }
 
   public function check_token($username, $token) {
-    $user = (new Users())->get_user($username);
+    $user = Users::get_instance()->get_user($username);
     $sql = 'SELECT token FROM users_authentication WHERE id_user = :id_user AND TIMESTAMPDIFF(YEAR, created, CURRENT_TIMESTAMP) < 1';
 
     $tokens = $this->db
@@ -44,5 +46,16 @@ class UsersAuth {
     }
 
     return false;
+  }
+
+
+
+  public static function get_instance() {
+    if (self::$instance === null) {
+      // throws exception upon failure
+      self::$instance = new self;
+    }
+
+    return self::$instance;
   }
 }

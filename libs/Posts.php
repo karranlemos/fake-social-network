@@ -4,9 +4,11 @@ class Posts {
 
   const ROWS_PER_PAGE = 20;
 
+  private static $instance = null;
+
   private $db;
-  public function __construct() {
-    $this->db = new Database();
+  private function __construct() {
+    $this->db = Database::get_instance();
   }
 
   public function get_posts($page, $rows_per_page=self::ROWS_PER_PAGE) {
@@ -118,7 +120,18 @@ class Posts {
   }
 
   public function create_post_username($username, $title='', $post_text=null, $media=null) {
-    $user_data = (new Users())->get_user($username, 'username');
+    $user_data = Users::get_instance()->get_user($username, 'username');
     return $this->create_post($user_data->id, $title, $post_text, $media);
+  }
+
+
+
+  public function get_instance() {
+    if (self::$instance === null) {
+      // throws exception on failure
+      self::$instance = new self;
+    }
+
+    return self::$instance;
   }
 }

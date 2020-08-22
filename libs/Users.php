@@ -4,9 +4,11 @@ class Users {
 
   const ROWS_PER_PAGE = 20;
 
+  private static $instance = null;
+
   private $db;
-  public function __construct() {
-    $this->db = new Database();
+  private function __construct() {
+    $this->db = Database::get_instance();
   }
 
   public function get_users($page, $rows_per_page=self::ROWS_PER_PAGE) {
@@ -81,5 +83,16 @@ class Users {
     if ($this->get_user($username) === false)
       return false;
     return true;
+  }
+
+
+
+  public function get_instance() {
+    if (self::$instance === null) {
+      // throws exception on failure
+      self::$instance = new self;
+    }
+
+    return self::$instance;
   }
 }

@@ -8,7 +8,7 @@ if (!isset($_POST['username']) || !isset($_POST['password'])) {
   Helpers::return_request_code(422, "422 (Unprocessable Entity): 'username', 'password' missing.");
 }
 
-$users = new Users;
+$users = Users::get_instance();
 
 if (!$users->check_user_exists($_POST['username'])) {
   Helpers::return_request_code(401, "401 (Unauthorized): username doesn't exist.");
@@ -20,7 +20,7 @@ if (!$correct_password) {
 }
 
 if (isset($_POST['remember'])) {
-  $token = (new UsersAuth)->create_token($_POST['username']);
+  $token = UsersAuth::get_instance()->create_token($_POST['username']);
   setcookie('logged_in', $_POST['username'].':'.$token, time() + (86400 * 30 * 365), '/');
 }
 

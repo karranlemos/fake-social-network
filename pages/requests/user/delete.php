@@ -12,12 +12,14 @@ if ($_SESSION['username'] !== $_POST['username']) {
   Helpers::return_request_code(403, '403 (Forbidden): deleting other accounts is not allowed.');
 }
 
-$correct_password = (new Users)->check_user_password($_POST['username'], $_POST['password']);
+$users = Users::get_instance();
+
+$correct_password = $users->check_user_password($_POST['username'], $_POST['password']);
 if (!$correct_password) {
   Helpers::return_request_code(401, '401 (Unauthorized): wrong password.');
 }
 
-$deleted_password = (new Users)->delete_user($_POST['username']);
+$deleted_password = $users->delete_user($_POST['username']);
 if (!$deleted_password) {
   Helpers::return_request_code(500, "501 (Internal Server Error): couldn't delete account.");
 }

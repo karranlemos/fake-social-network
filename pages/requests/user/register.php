@@ -13,6 +13,6 @@ if ($_POST['password'] !== $_POST['password-repeat']) {
   Helpers::return_request_code(400, "400 (Bad Request): passwords don't match.");
 }
 
-(new Users)->create_user($_POST['username'], $_POST['email'], $_POST['password']);
+Users::get_instance()->create_user($_POST['username'], $_POST['email'], $_POST['password']);
 
 Helpers::return_request_code(201, 'Registered.');
