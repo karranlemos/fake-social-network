@@ -289,6 +289,7 @@ const _STATIC_POST_GETTER_FIELDS = {
 class PostsGetter {
     constructor() {
         this.PERIOD_BETWEEN_REQUESTS = 100
+        this.PAGE_LENGTH = 10
 
         this.container = document.getElementById('dashboard-posts-container')
 
@@ -296,7 +297,6 @@ class PostsGetter {
             throw 'No container found'
 
         this.page = 0
-        this.pageLength = 2
         this.noMorePosts = false
         this.lastRequest = Date.now()-this.PERIOD_BETWEEN_REQUESTS
         
@@ -346,7 +346,7 @@ class PostsGetter {
         const callbackOnFailure = function() {}
 
         this.getPosts(
-            `get-all&page=${++this.page}&number-rows=${this.pageLength}`,
+            `get-all&page=${++this.page}&number-rows=${this.PAGE_LENGTH}`,
             callbackCheckSuccess,
             callbackOnSuccess,
             callbackOnFailure
