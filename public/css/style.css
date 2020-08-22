@@ -458,6 +458,11 @@ main.dashboard .main-dashboard-content section.post {
     min-height: 200px;
 }
 
+main.dashboard .main-dashboard-content section.post.deleted {
+    min-height: 50px;
+    text-align: center;
+}
+
 main.dashboard .main-dashboard-content section.post footer {
     margin-top: 30px;
 }

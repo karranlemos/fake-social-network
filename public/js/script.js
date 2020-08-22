@@ -256,6 +256,16 @@ class PostElement {
         delete _STATIC_POST_ELEMENT_FIELDS.postElements[postId]
     }
 
+    static deletePostContent(postId) {
+        var post = _STATIC_POST_ELEMENT_FIELDS.postElements[postId]
+        if (!post)
+            return
+        while (post.node.firstChild)
+            post.node.removeChild(post.node.firstChild)
+        post.node.insertAdjacentHTML('beforeend', `<p>Deleted</p>`)
+        post.node.classList.add('deleted')
+    }
+
     static updatePostText(postId, newText) {
         var postElement = _STATIC_POST_ELEMENT_FIELDS.postElements[postId]
         if (!postElement)
@@ -866,7 +876,7 @@ class Factories {
         }
 
         var callbackOnSuccess = function () {
-            PostElement.deletePostNode(this.getData('post-id').value)
+            PostElement.deletePostContent(this.getData('post-id').value)
             this.form.reset()
             Modal.closeAllModals()
         }
