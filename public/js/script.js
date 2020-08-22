@@ -151,7 +151,12 @@ class PostElement {
         if (!['beforeend', 'afterbegin'].includes(position))
             throw "Position must be 'beforeend' or 'afterstart'."
         
-        created = this._format_date_string(created)
+        try {
+            created = this._format_date_string(created)
+        }
+        catch {
+            // uses passed string
+        }
 
         var html = this._createPostHTML(post_id, title, username, created, text, addLink)
         this.node = this._createPostNode(html, parentNode, position)
@@ -229,13 +234,10 @@ class PostElement {
     }
 
     _format_date_string(created) {
-        created = created.split(' ', 2)
-        
-        // yyyy-mm-dd => dd/mm/yyyy
-        var date = created[0].split('-').reverse().join('/')
-        var time = created[1]
-
-        return date+' '+time
+        var created_final = Helpers.getDateTimeString(created)
+        if (created_final === false)
+            throw 'Invalid Date'
+        return created_final
     }
 
 
@@ -979,6 +981,24 @@ class Helpers {
     static getQueryValue(key) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(key);
+    }
+
+
+
+    static getDateTimeString(anyDate) {
+        var createdDate = new Date(anyDate)
+        if (String(createdDate) === 'Invalid Date')
+            return false
+        
+        var day = String(createdDate.getDate()).padStart(2, '0')
+        var month = String(createdDate.getMonth()+1).padStart(2, '0')
+        var year = String(createdDate.getFullYear()).padStart(4, '0')
+
+        var hour = String(createdDate.getHours()+1).padStart(2, '0')
+        var minute = String(createdDate.getMinutes()).padStart(2, '0')
+        var second = String(createdDate.getSeconds()).padStart(2, '0')
+
+        return `${day}/${month}/${year} ${hour}:${minute}:${second}`
     }
 }
 
