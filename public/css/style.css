@@ -476,6 +476,12 @@ main.dashboard .main-dashboard-content section.post footer {
     margin-top: 30px;
 }
 
+main.dashboard .main-dashboard-content button.no-more-posts {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 30px;
+}
+
 main.dashboard .functionality {
     display: flex;
     justify-content: center;

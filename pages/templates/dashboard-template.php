@@ -42,7 +42,9 @@ else {
         <?php endif;?>
       </main>
       
-      <footer class="page-footer">Criado por Karran Lemos.</footer>
+      <?php if($data['single-page']): ?>
+        <footer class="page-footer">Criado por Karran Lemos.</footer>
+      <?php endif;?>
 
     </div>
     

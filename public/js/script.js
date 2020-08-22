@@ -288,7 +288,7 @@ const _STATIC_POST_GETTER_FIELDS = {
 }
 class PostsGetter {
     constructor() {
-        this.PERIOD_BETWEEN_REQUESTS = 100
+        this.PERIOD_BETWEEN_REQUESTS = 20
         this.PAGE_LENGTH = 10
 
         this.container = document.getElementById('dashboard-posts-container')
@@ -424,7 +424,8 @@ class PostsGetter {
     }
 
     toggleNoMorePostsMessage() {
-        // TODO
+        var html = `<a href=""><button class="primary no-more-posts">Reload</button></a>`
+        this.container.insertAdjacentHTML('beforeend', html)
     }
 
 
