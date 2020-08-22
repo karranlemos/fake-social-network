@@ -534,8 +534,6 @@ class GenericPostSender {
             this.callbackOnResponse()
             
             this.unblockSubmit()
-            if (typeof this.form.reset === 'function')
-                this.form.reset()
         }.bind(this), this.method, this.callbackGetParams())
     }
 
@@ -615,6 +613,7 @@ class Factories {
                 .setData('email', this.form.querySelector('input[name="email"]'))
                 .setData('password', this.form.querySelector('input[name="password"]'))
                 .setData('password_repeat', this.form.querySelector('input[name="password-repeat"]'))
+                .setData('errorsContainer', this.form.querySelector('.js-errors-container'))
             
             for (let dataKey of ['username', 'email', 'password', 'password_repeat']) {
                 if (!this.getData(dataKey))
@@ -631,8 +630,11 @@ class Factories {
             return params
         }
 
-        var callbackOnSuccess = function () {}
-        var callbackOnFailure = function () {}
+        var callbackOnSuccess = function(status, message) {
+            Factories.messageBoxFactory('success').bind(this)(status, message)
+            this.form.reset()
+        }
+        var callbackOnFailure = Factories.messageBoxFactory('failure')
         var callbackOnResponse = function() {}
         var callbackBeforeRequest = function() {}
 
@@ -744,6 +746,7 @@ class Factories {
                 post_text: this.getData('post_text_element').value,
                 created: 'now'
             }, 'afterbegin')
+            this.form.reset()
             Modal.closeAllModals()
         }
 
@@ -795,6 +798,7 @@ class Factories {
 
         var callbackOnSuccess = function () {
             PostElement.updatePostText(this.getData('id_element').value, this.getData('post_text_element').value)
+            this.form.reset()
             Modal.closeAllModals()
         }
 
@@ -858,6 +862,7 @@ class Factories {
 
         var callbackOnSuccess = function () {
             PostElement.deletePostNode(this.getData('post-id').value)
+            this.form.reset()
             Modal.closeAllModals()
         }
 
