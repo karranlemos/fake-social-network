@@ -175,17 +175,24 @@ class PostElement {
 
     _createPostNode(html, parentNode, position) {
         parentNode.insertAdjacentHTML(position, html)
+        
+        var newNode
         if (position === 'afterbegin')
-            return parentNode.querySelector('section.post:first-child')
+            newNode = parentNode.querySelector('section.post:first-child')
         else
-            return parentNode.querySelector('section.post:last-child')
+            newNode = parentNode.querySelector('section.post:last-child')
+        
+        window.setTimeout(function() {
+            newNode.classList.remove('hidden')
+        }, 10)
+        return newNode
     }
 
     _createPostHTML(post_id, title, username, created, text, addLink) {
         if (addLink)
             title = `<a href="/dashboard/?post-id=${post_id}" class="post-link-title">${title}</a>`
         return `
-            <section class="post" data-post-id="${post_id}" data-username="${username}">
+            <section class="post hidden" data-post-id="${post_id}" data-username="${username}">
                 <header>
                 <h2 class="post-title">${title}</h2>
                 <div class="post-data">

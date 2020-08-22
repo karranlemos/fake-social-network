@@ -456,6 +456,13 @@ main.dashboard .functionality {
 
 main.dashboard .main-dashboard-content section.post {
     min-height: 200px;
+    
+    opacity: 1;
+    transition: opacity 0.8s;
+}
+
+main.dashboard .main-dashboard-content section.post.hidden {
+    opacity: 0;
 }
 
 main.dashboard .main-dashboard-content section.post.deleted {
