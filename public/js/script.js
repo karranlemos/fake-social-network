@@ -747,6 +747,8 @@ class Factories {
                 post_text: this.getData('post_text_element').value,
                 created: 'now'
             }, 'afterbegin')
+
+            Factories.messageBoxCleanerFactory().bind(this)()
             this.form.reset()
             Modal.closeAllModals()
         }
@@ -783,8 +785,9 @@ class Factories {
                 .setData('id_element', this.form.querySelector('input[name="post-id"]'))
                 .setData('title_element', this.form.querySelector('input[name="title"]'))
                 .setData('post_text_element', this.form.querySelector('textarea[name="post-text"]'))
+                .setData('errorsContainer', this.form.querySelector('.js-errors-container'))
             
-            for (let dataKey of ['id_element', 'title_element', 'post_text_element']) {
+            for (let dataKey of ['id_element', 'title_element', 'post_text_element', 'errorsContainer']) {
                 if (!this.getData(dataKey))
                     throw 'Item not found: '+dataKey
             }
@@ -799,11 +802,12 @@ class Factories {
 
         var callbackOnSuccess = function () {
             PostElement.updatePostText(this.getData('id_element').value, this.getData('post_text_element').value)
+            Factories.messageBoxCleanerFactory().bind(this)()
             this.form.reset()
             Modal.closeAllModals()
         }
 
-        var callbackOnFailure = function () {}
+        var callbackOnFailure = Factories.messageBoxFactory('failure')
         var callbackBeforeRequest = function () {}
 
         var callbackCheckSuccess = function(statusCode) {
@@ -997,6 +1001,14 @@ class Factories {
             }
 
             new MessageBox(message, type).createBox(errorsContainer, 'afterbegin')
+        }
+    }
+
+    static messageBoxCleanerFactory() {
+        return function(status, message) {
+            var errorsContainer = this.getData('errorsContainer')
+            while (errorsContainer.firstChild)
+                errorsContainer.removeChild(errorsContainer.firstChild)
         }
     }
 }
