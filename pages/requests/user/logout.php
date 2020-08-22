@@ -1,8 +1,8 @@
 <?php
 
 if (!isset($_SESSION['username'])) {
-  Helpers::return_request_code(401, "401 (Unauthorized): user cannot logout if not logged in.");
+  Helpers::return_request_json_message(401, "User cannot logout if not logged in.");
 }
 
 Session::logout();
-Helpers::return_request_code(200, "200 (OK): logged out.");
+Helpers::return_request_json_message(200, "Logged out.");

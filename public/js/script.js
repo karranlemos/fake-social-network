@@ -320,7 +320,9 @@ class PostsGetter {
             catch (e) {
                 return
             }
-            this.loadPosts(jsonObj)
+            if (jsonObj.posts === undefined)
+                return
+            this.loadPosts(jsonObj.posts)
         }
         const callbackOnFailure = function() {}
 
@@ -343,8 +345,10 @@ class PostsGetter {
             catch (e) {
                 return
             }
-            if (jsonObj.length === 1)
-                this.loadPost(jsonObj[0], 'beforeend', false)
+            if (jsonObj.posts === undefined)
+                return
+            if (jsonObj.posts.length === 1)
+                this.loadPost(jsonObj.posts[0], 'beforeend', false)
         }
         const callbackOnFailure = function(status) {
             if (status !== 404)

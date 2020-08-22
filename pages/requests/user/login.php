@@ -1,22 +1,22 @@
 <?php
 
 if (isset($_SESSION['username'])) {
-  Helpers::return_request_code(403, "403 (Forbidden): the user is already logged in.");
+  Helpers::return_request_json_message(403, "The user is already logged in.");
 }
 
 if (!isset($_POST['username']) || !isset($_POST['password'])) {
-  Helpers::return_request_code(422, "422 (Unprocessable Entity): 'username', 'password' missing.");
+  Helpers::return_request_json_message(422, "Parameters 'username', 'password' missing.");
 }
 
 $users = Users::get_instance();
 
 if (!$users->check_user_exists($_POST['username'])) {
-  Helpers::return_request_code(401, "401 (Unauthorized): username doesn't exist.");
+  Helpers::return_request_json_message(401, "Username doesn't exist.");
 }
 
 $correct_password = $users->check_user_password($_POST['username'], $_POST['password']);
 if (!$correct_password) {
-  Helpers::return_request_code(401, "401 (Unauthorized): wrong password.");
+  Helpers::return_request_json_message(401, "Wrong password.");
 }
 
 if (isset($_POST['remember'])) {
@@ -26,4 +26,4 @@ if (isset($_POST['remember'])) {
 
 Session::log_in_session($_POST['username']);
 
-Helpers::return_request_code(200, 'Logged in.');
+Helpers::return_request_json_message(200, 'Logged in.');
