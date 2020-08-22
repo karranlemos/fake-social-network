@@ -212,7 +212,7 @@ class LoremIpsum {
 
 
 
-  public static function random_text($min_number_letters) {
+  public static function random_text($min_number_letters, $can_have_paragraph=true) {
     if ($min_number_letters > self::MAX_TEXT_LENGTH)
       throw new Exception(sprintf('Length must be, at most, %d.', self::MAX_TEXT_LENGTH));
     
@@ -231,8 +231,8 @@ class LoremIpsum {
         $new_text = ' '.$new_text;
       }
 
-      if (--$words_before_newline <= 0) {
-        $new_text .= '.\n';
+      if ($can_have_paragraph && --$words_before_newline <= 0) {
+        $new_text .= '.<br>';
         $words_before_newline = self::generate_number_words_before_newline();
         $words_before_point = self::generate_number_words_before_point();
         $first_word = true;
@@ -248,7 +248,7 @@ class LoremIpsum {
 
     $last_char = $text[strlen($text)-1];
     switch ($last_char) {
-      case '.': case '\n': case ' ':
+      case '.': case '<br>': case ' ':
         break;
       default:
         $text .= '.';

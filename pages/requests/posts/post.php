@@ -18,7 +18,7 @@ if ($title === '') {
 
 
 if (defined('__DEMO_MAKE_DUMMY_TEXT__')) {
-  $title = LoremIpsum::random_text(strlen($title));
+  $title = LoremIpsum::random_text(strlen($title), false);
   $post_text = LoremIpsum::random_text(strlen($post_text));
 }
 
