@@ -551,6 +551,7 @@ main.dashboard .functionality button {
 
 h2.post-title {
     color: var(--post-link-color);
+    font-size: 24px;
 }
 
 a.post-link-title, a.post-link-title:focus,
