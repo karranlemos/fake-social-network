@@ -46,9 +46,9 @@ else {
                 <label>Remember me? <input type="checkbox" name="remember"></label>
               </div>
               <button type="submit" class="primary button-block" name="login-form">Login</button>
-              <div class="secondary-links">
+              <!-- <div class="secondary-links">
                 <a href="#">Forgot Your Password?</a>
-              </div>
+              </div> -->
             </form>
           </section>
 
