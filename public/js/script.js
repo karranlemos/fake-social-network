@@ -400,6 +400,9 @@ class PostsGetter {
     }
 
     loadPosts(jsonObj) {
+        if (this.noMorePosts)
+            return
+        
         if (jsonObj.length === 0) {
             this.noMorePosts = true
             this.toggleNoMorePostsMessage()
