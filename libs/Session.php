@@ -13,7 +13,7 @@ class Session {
       return false;
     }
     [$username, $token] = [$cookie[0], $cookie[1]];
-    $token_correct = UsersAuth()::get_instance()->check_token($username, $token);
+    $token_correct = UsersAuth::get_instance()->check_token($username, $token);
     if (!$token_correct) {
       setcookie('logged_in', '', time()-30, '/'); 
     }
