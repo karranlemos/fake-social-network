@@ -5,10 +5,7 @@ session_start();
 define('__ROOT__', dirname(__DIR__));
 define('__BASE__', '/');
 
-define('DB_HOST', 'us-cdbr-east-02.cleardb.com');
-define('DB_USERNAME', 'bed96cf025befc');
-define('DB_PASSWORD', 'c4a910b1');
-define('DB_NAME', 'heroku_3f6e89d0e06518e');
+require_once(__DIR__.'/database.php');
 
 // Turns posted text into dummy text.
 define('__DEMO_MAKE_DUMMY_TEXT__', '');
